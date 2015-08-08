@@ -16,6 +16,11 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     
     let pageSize = 4
     var winSize = CGRect()
+    var winSizeData: CGRect {
+        get{
+            return winSize
+        }
+    }
     var footCount = 2
     
     var walkTestTimer: NSTimer!
@@ -39,6 +44,8 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     
     //バナー広告準備
     var bannerView: GADBannerView = GADBannerView()
+    //バナー広告クラス宣言
+    var ab: AdmobBanner!
     
     func adsButtonAction(sender: UIButton){
         let url = NSURL(string: "https://itunes.apple.com/us/app/ultrazebra/id853473067?l=ja&ls=1&mt=8")
@@ -85,6 +92,8 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         
         removeFromParentViewController() //とりあえずなんか解放できるかも
         
+        self.ab = AdmobBanner(view: self) //バナーインスタンス生成
+
         winSize = self.view.bounds //画面サイズ取得
         
         
@@ -121,6 +130,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         
         if(myUserDefault.boolForKey("RegularUser_Ads")){
             adbannerOpen() //バナー広告表示
+//            ab.adbannerOpen() //バナー広告表示
         }
         self.myUserDafault.setBool(true, forKey: "RegularUser_Ads")
         self.myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
@@ -391,7 +401,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
 //        var request = GADRequest()
 //        request.testDevices = ["9e51e86223f362580ae947fffea1b3e8"]
 //        bannerView.loadRequest(request) //テスト用
-        
+
         bannerView.loadRequest(GADRequest()) //本番用
     }
     

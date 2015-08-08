@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		155277701B758A1C00BFC42A /* AdmobInterstitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1552776F1B758A1C00BFC42A /* AdmobInterstitial.swift */; };
+		155A3B581B75E3F200B39875 /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B571B75E3F200B39875 /* AdmobBanner.swift */; };
 		15D36A9E1B6DF27D001AE571 /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D36A9D1B6DF27D001AE571 /* HexColor.swift */; };
 		15F2C3341B5A10C2005DD3CB /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15F2C3331B5A10C2005DD3CB /* GoogleMobileAds.framework */; };
 		9A148C751ACCD49C001BEC29 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A148C741ACCD49C001BEC29 /* LangManager.swift */; };
@@ -112,6 +114,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1552776F1B758A1C00BFC42A /* AdmobInterstitial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdmobInterstitial.swift; sourceTree = "<group>"; };
+		155A3B571B75E3F200B39875 /* AdmobBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
 		15D36A9D1B6DF27D001AE571 /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
 		15F2C2A51B59F643005DD3CB /* AlarmWork_Swift_Bridging_Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlarmWork_Swift_Bridging_Header.h; sourceTree = "<group>"; };
 		15F2C3331B5A10C2005DD3CB /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = ../../../ads/GoogleMobileAds.framework; sourceTree = "<group>"; };
@@ -232,6 +236,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1552776E1B758A1000BFC42A /* Ads */ = {
+			isa = PBXGroup;
+			children = (
+				1552776F1B758A1C00BFC42A /* AdmobInterstitial.swift */,
+				155A3B571B75E3F200B39875 /* AdmobBanner.swift */,
+			);
+			name = Ads;
+			sourceTree = "<group>";
+		};
 		15D36A9B1B6DF187001AE571 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +358,7 @@
 		9A2CEDE01ABFCF370078A7AB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1552776E1B758A1000BFC42A /* Ads */,
 				15D36A9C1B6DF1FC001AE571 /* Tools */,
 				15D36A9B1B6DF187001AE571 /* View */,
 				9A148C731ACCD482001BEC29 /* Manager */,
@@ -622,11 +636,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A2CEDEB1ABFCF370078A7AB /* EditViewController.swift in Sources */,
+				155277701B758A1C00BFC42A /* AdmobInterstitial.swift in Sources */,
 				9A2CEDEE1ABFCF370078A7AB /* MusicController.swift in Sources */,
 				9A2CEDF01ABFCF370078A7AB /* UiPageController.swift in Sources */,
 				9A2CEDEA1ABFCF370078A7AB /* AppDelegate.swift in Sources */,
 				9A148C751ACCD49C001BEC29 /* LangManager.swift in Sources */,
 				15D36A9E1B6DF27D001AE571 /* HexColor.swift in Sources */,
+				155A3B581B75E3F200B39875 /* AdmobBanner.swift in Sources */,
 				9A2CEDEC1ABFCF370078A7AB /* FirstClass.swift in Sources */,
 				9A2CEDEF1ABFCF370078A7AB /* SystemVolumeController.swift in Sources */,
 			);

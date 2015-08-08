@@ -15,6 +15,11 @@ import CoreMotion
 import GoogleMobileAds
 
 class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationManagerDelegate {
+    class func instance() -> Self {
+        return self()
+    }
+    /**Admobインタースティシャルクラス宣言*/
+    var ai:AdmobInterstitial!
     
     //ユーザ設定
     var walkStep:Double = 0.1 //小幅の人は0.1//普通の人0.3 //大幅の人は0.8º //ランニングの場合は1.5
@@ -122,8 +127,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     var vibTimer : NSTimer!
     var alarmTimer : NSTimer!
     var playBoyTimer : NSTimer!
-    //広告タイマー
-    var interstitialTimer : NSTimer!
     //マナーモード解除警告
     var mannerCautionTimer : NSTimer!
     
@@ -216,9 +219,15 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     
     //エフェクトビュー(隠すやつ)
     var effectView : UIVisualEffectView!
+    
     //インタースティシャル広告準備
     var interstitial: GADInterstitial = GADInterstitial()
-    
+    var interstitialData: GADInterstitial {
+        get{
+            return interstitial
+        }
+    }
+   
     //ステップバー変更
     func stepperOneChanged(stepper: UIStepper){
         myUserDafault.setInteger(Int(stepper.value), forKey: "LIFEFINAL")
@@ -392,14 +401,16 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //        //        tutorialBtn.backgroundColor = UIColor.hexStr("000000", alpha: 0.3)
     //        tutorialBtn.setImage(UIImage(CIImage: howtoOpenCIImage), forState: .Normal)
     //    }
+    func onUpdate(timer : NSTimer){
+        print("111uouch")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         removeFromParentViewController() //とりあえずなんか解放できるかも
-        //インタースティシャル広告準備
-        admobInterstitialReady()
+        self.ai = AdmobInterstitial(view: self) //Admobインタースティシャルインスタンスを生成
         //        println(myUserDafault.integerForKey("TUTORIALLIFE"))
         /*リセット！音楽鳴らしたり止めたり(テスト用)*/
-        //        self.myUserDafault.setBool(true, forKey: "HAJIMEIPPO_STILL")
+        //        self.myUserDafault.setBool(true, forKey:≤ "HAJIMEIPPO_STILL")
         //        self.myUserDafault.synchronize()
         //        bgFlag = true
         //        myUserDafault.setBool(bgFlag, forKey: "bgm")
@@ -487,7 +498,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "getInstanceVolumeButtonNotification:", name: "AVSystemController_SystemVolumeDidChangeNotification", object: nil)
         var n = Int(arc4random()%20)
         if(n == 0){
-            interstitialTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "ads", userInfo: nil, repeats: true)
+            ai.showAds(5)
         }
         
     }
@@ -1499,7 +1510,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             handler:{
                 (action:UIAlertAction!) -> Void in
                 let textFields:Array<UITextField>? =  alert.textFields as! Array<UITextField>?
-                self.interstitial.presentFromRootViewController(self) //インタースティシャル広告表示
+                self.ai.showAds() //広告表示
         })
         alert.addAction(defaultAction)
         presentViewController(alert, animated: true, completion: nil)
@@ -1639,19 +1650,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         volumeChange.systemVolumeChange(0.3) //システム音変更 //本来は0.3
     }
     
-    //admobインタースティシャル準備
-    func admobInterstitialReady(){
-        //本番用
-        interstitial.adUnitID = "ca-app-pub-1645837363749700/5447856877"
-        interstitial.loadRequest(GADRequest())
-        
-        //テスト用
-        //        var request = GADRequest()
-        //        request.testDevices = ["9e51e86223f362580ae947fffea1b3e8"]
-        //        interstitial.loadRequest(request)
-    }
-    
-    
     func audioPlayerDidFinishPlaying(player: AVAudioPlayer!, successfully flag: Bool) {
         player.stop()
         // 再生終了を通知
@@ -1673,12 +1671,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
         
     }
-    func ads(){
-        self.interstitial.presentFromRootViewController(self) //インタースティシャル広告表示
-        interstitialTimer.invalidate()
-        interstitialTimer = nil
-    }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
