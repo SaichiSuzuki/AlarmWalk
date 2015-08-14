@@ -10,6 +10,7 @@ import UIKit
 
 class LangManager {
     var lang:[String] = []
+    var musicName:[String] = []
     init(){ //English
         //UiPageController
         lang.append("1.Setting time\n2.Switch On!")
@@ -55,5 +56,25 @@ class LangManager {
     }
     func getString(num:Int) ->String{
         return lang[num]
+    }
+    func getMusicName() ->[String]{
+        setMusicName()
+        return musicName
+    }
+    func setMusicName(){
+        //English
+        musicName.append("Fight")
+        musicName.append("Smooth")
+        musicName.append("Roll")
+        musicName.append("Life")
+        musicName.append("Random")
+//        var myUserDafault:NSUserDefaults = NSUserDefaults()
+//        if(myUserDafault.integerForKey("LANGUAGE") == 1){ //Japanese
+//            musicName[0] = "Fight"
+//            musicName[1] = "Smooth"
+//            musicName[2] = "Road"
+//            musicName[3] = "Life"
+//            musicName[4] = "Random"
+//        }
     }
 }

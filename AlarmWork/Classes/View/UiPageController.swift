@@ -206,7 +206,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             //メイン画像
             var iphoneView:UIImageView = UIImageView(image:howtoImage1_1)
             iphoneView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 199, 305)
+            iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 190, 337)
             //サブ画像
             var iphoneSubView:UIImageView = UIImageView(image:howtoImage1_2)
             iphoneSubView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -215,9 +215,9 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             
             switch i{
             case 0: myLabel.text = lm.getString(0)
-            iphoneView.layer.position = CGPoint(x: winSize.width/2 - 55, y: winSize.height/2 + 25)
-            iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 150, 225)
-            iphoneSubView.layer.position = CGPoint(x: winSize.width/2 + 75, y: winSize.height/2 + 25)
+            iphoneView.layer.position = CGPoint(x: winSize.width/2 - 65, y: winSize.height/2 + 25)
+            iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 145, 253)
+            iphoneSubView.layer.position = CGPoint(x: winSize.width/2 + 85, y: winSize.height/2 + 65)
             iphoneSubView.hidden = false
                 break
             case 1: myLabel.text = lm.getString(1)

@@ -18,7 +18,7 @@ struct AVAudioPlayerUtil {
     
     static func setValue(nsurl:NSURL){
         self.sound_data = nsurl;
-        self.audioPlayer[0] = AVAudioPlayer(contentsOfURL: self.sound_data, error: nil);
+        self.audioPlayer[0] = AVAudioPlayer(contentsOfURL: self.sound_data, error: nil); //バックグラウンドでも鳴らす
         self.audioPlayer[0].numberOfLoops = -1;
         self.audioPlayer[0].prepareToPlay();
     }
@@ -39,16 +39,16 @@ struct AVAudioPlayerUtil {
         self.audioPlayer[3].prepareToPlay();
     }
     static func play(){
-        let musicNameStr:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
-        AVAudioPlayerUtil.setValue(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStr, ofType: "caf")!)!);//ファイルセット（再生前事前準備）
+        let musicNameStrPlay:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+        AVAudioPlayerUtil.setValue(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStrPlay, ofType: "caf")!)!);//ファイルセット（再生前事前準備）
         AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
         AVAudioSession.sharedInstance().setActive(true, error: nil)
         self.audioPlayer[0].play();
         mainSetting();
     }
     static func testPlay(){
-        let musicNameStr:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
-        AVAudioPlayerUtil.setValueTest(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStr, ofType: "caf")!)!);//ファイルセット（再生前事前準備）
+        let musicNameStrTestPlay:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+        AVAudioPlayerUtil.setValueTest(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStrTestPlay, ofType: "caf")!)!);//ファイルセット（再生前事前準備）
         AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
         AVAudioSession.sharedInstance().setActive(true, error: nil)
         self.audioPlayer[3].play();
@@ -85,8 +85,8 @@ struct AVAudioPlayerUtil {
     }
     static func stopTest(){
         //ストップで準備は書きたくないがストップのが先に呼ばれるためとりあえず書く
-        let musicNameStr:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
-        AVAudioPlayerUtil.setValueTest(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStr, ofType: "caf")!)!);//ファイルセット（再生前事前準備）
+        let musicNameStrStopTest:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+        AVAudioPlayerUtil.setValueTest(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStrStopTest, ofType: "caf")!)!);//ファイルセット（再生前事前準備）
         AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
         AVAudioSession.sharedInstance().setActive(true, error: nil)
         self.audioPlayer[3].stop();

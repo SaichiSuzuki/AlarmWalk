@@ -11,7 +11,7 @@ import UIKit
 class CellViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // Tableで使用する配列を設定する
-    private let myItems: NSArray = ["bravo", "cafe", "normal", "village", "wafu", "You_wanna_fight"]
+    private var myItems: [String] = ["You_wanna_fight","Electron","Yukai","Labo","Random"]
     private var myTableView: UITableView!
     
     //試聴中かどうかフラグ
@@ -20,6 +20,8 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     var audienceButton: UIButton!
     //音楽なってるかチェックタイマー
     var isMusicCheckTimer: NSTimer!
+    //再生ボタン
+    //    let playBackCIImage = CIImage(image: UIImage(named: "playBack.png"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +33,11 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidDisappear(animated)
         var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.navCon?.setNavigationBarHidden(false, animated: false)
+        appDelegate.navCon?.navigationBar.tintColor = UIColor.darkGrayColor() //戻る文字色変更
+        let lm = LangManager()
+        for (index,n) in enumerate(lm.getMusicName()){
+            myItems[index] = n
+        }
     }
     
     
@@ -71,7 +78,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         //            }
         //        }
         allCellAction(tableView,type: "color")
-        musicSelectAction(indexPath.row)
+        musicSave(indexPath.row)
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setObject(indexPath.row, forKey: "INDEX_PATH")
         ud.synchronize()
@@ -141,8 +148,10 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.textLabel?.textColor = UIColor.whiteColor()
         
         //試聴ボタン追加
-        audienceButton = UIButton(frame: CGRectMake(0, 0, 40, 20))
+        audienceButton = UIButton(frame: CGRectMake(0, 0, 50, 45))
+//        audienceButton.layer.backgroundColor = UIColor.redColor().CGColor!
         audienceButton.setTitle("♪", forState: .Normal)
+        //        audienceButton.setImage(UIImage(CIImage: playBackCIImage), forState: .Normal)
         audienceButton.addTarget(self, action: "musicAudition:", forControlEvents:.TouchUpInside)
         audienceButton.tag = indexPath.row
         cell.accessoryView = audienceButton
@@ -175,6 +184,8 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func musicAudition(sender: UIButton){
+        let ud = NSUserDefaults.standardUserDefaults()
+        var temp = ud.stringForKey("MUSIC_NAME")
         musicSave(sender.tag)
         /**今の所アラーム中にやってはいけない設定*/
         /**マナー中ならならないようにしたい*/
@@ -191,39 +202,45 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
             AVAudioPlayerUtil.stopTest();//停止
             sender.setTitle("♪", forState: .Normal)
         }
+        ud.setObject(temp, forKey: "MUSIC_NAME")
+        ud.synchronize()
     }
     
     //音楽選択ボタン
-    func musicSelectAction(cellNum:Int){
-        musicSave(cellNum)
-    }
+//    func musicSelectAction(cellNum:Int){
+//        musicSave(cellNum)
+//    }
     func musicSave(num:Int){
-        var bgName = ""
-        switch num{
-        case 0:
-            bgName = "bravo"
-            break
-        case 1:
-            bgName = "cafe"
-            break
-        case 2:
-            bgName = "normal"
-            break
-        case 3:
-            bgName = "village"
-            break
-        case 4:
-            bgName = "wafu"
-            break
-        case 5:
-            bgName = "You_wanna_fightC"
-            break
-        default:
-            break
+        var bgName = "nil"
+        var n = num
+        while(bgName == "nil"){
+            bgName = selectBGM(n)
+            n = Int(arc4random() % UInt32(myItems.count))
         }
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setObject(bgName, forKey: "MUSIC_NAME")
         ud.synchronize()
+    }
+    func selectBGM(num:Int) -> String{
+        var bgName = ""
+        switch num{
+        case 0:
+        bgName = "You_wanna_fightC"
+            break
+        case 1:
+        bgName = "Electron"
+            break
+        case 2:
+        bgName = "Yukai"
+            break
+        case 3:
+        bgName = "Labo"
+            break
+        default:
+            bgName = "nil"
+            break
+        }
+        return bgName
     }
     
     

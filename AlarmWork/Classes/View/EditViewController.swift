@@ -111,7 +111,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     var timeDifference = 0
     //ピッカーいじったか
     var pickerUsedFlag = false
-    
+    //日またいだ日数
+    var dayCount = 0
     
     
     /*フラグ準備*/
@@ -159,8 +160,10 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     var giveUpBtn: UIButton!
     //音楽選択ボタン
     var musicSelectBtn: UIButton!
+    //音楽選択ボタンの画像
+    var myImageView: UIImageView!
     //音楽選択ウィンドウ
-    var musicSelectView: UIView!
+    //    var musicSelectView: UIView!
     //音楽鳴らすボタン
     var musicHearButton1: UIButton!
     var musicHearButton2: UIButton!
@@ -188,16 +191,19 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //    let runCIImage = CIImage(image: UIImage(named: "soundIconOne.png"))
     //    var runUIImage:UIImageView!
     //足跡アイコン
-    let footCIImage = CIImage(image: UIImage(named: "footPaint.png"))
+    let footImage = UIImage(named: "footPaint.png")
     var footUIImage:UIImageView!
     //チュートリアルアイコン
     //    let howtoCIImage = CIImage(image: UIImage(named: "infooff.png"))
     //チュートリアルオープン状態
-    let howtoOpenCIImage = CIImage(image: UIImage(named: "infoon.png"))
+    let howtoOpenImage = UIImage(named: "infoon.png")
     //アラームアイコン
-    let alarmOnCIImage = CIImage(image: UIImage(named: "bellon.png"))
-    let alarmOffCIImage = CIImage(image: UIImage(named: "belloff.png"))
-    var alarmUIImage:UIImageView!
+    var bellOnImage = UIImage(named: "bellon.png")
+    var bellOffImage = UIImage(named: "belloff.png")
+    var bellImageView: UIImageView!
+    //音楽選択ボタン
+    let musicSelectCIImage = CIImage(image: UIImage(named: "musicLibrary.png"))
+    
     
     //チュートリアルボタン
     var tutorialBtn: UIButton!
@@ -226,6 +232,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
     }
     
+    var pastStep = 0
     //ステップバー変更
     func stepperOneChanged(stepper: UIStepper){
         myUserDafault.setInteger(Int(stepper.value), forKey: "LIFEFINAL")
@@ -233,6 +240,10 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         myUserDafault.synchronize()
         lifePoints = myUserDafault.integerForKey("LIFE")
         self.pointLabel.text = "\(self.lifePoints)"
+        if(stepper.value > 13 && pastStep != 13){
+            bgColorChange()
+        }
+        pastStep = Int(stepper.value)
     }
     //ステップスライダー動かす
     //    func onChangeValueStepSlider(sender : UISlider){
@@ -249,7 +260,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         if sender.on == true {
             onOffFlag = true
             self.mannerModeLabel.text = lm.getString(11)
-            alarmUIImage.image = UIImage(CIImage: alarmOnCIImage)
+            bellImageView.image = bellOnImage
             setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             myUserDafault.setBool(true, forKey: "HAJIMEIPPO_STILL")
             myUserDafault.synchronize()
@@ -268,7 +279,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             //            switchPushOverFlag = false
             postTime = 0
             onOffFlag = false
-            alarmUIImage.image = UIImage(CIImage: alarmOffCIImage)
+            bellImageView.image = bellOffImage
             setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
             UIView.animateWithDuration(1.0, animations: {() -> Void in
                 self.mannerModeLabel.center = CGPoint(x: -150,y: self.winSize.height/2 + 40)
@@ -379,7 +390,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         super.viewDidAppear(animated)
         AVAudioPlayerUtil.stopTest();//停止
         alertComeCheck() //アラートからきたかチェック
-//        musicStop()
+        //        musicStop()
     }
     
     override func viewDidLoad() {
@@ -502,23 +513,28 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         var pastTime = myUserDafault.integerForKey("pastTime") //スイッチオンした時間
         var differenceTime = myUserDafault.integerForKey("differenceTime")
         var planTime = myUserDafault.integerForKey("PLANSECOND") //設定時間
-//        var timerPlanTime = pastTime + differenceTime //設定時間
-//        if(timerPlanTime>=86400){
-//            timerPlanTime - 86400
-//        }
+        //        var timerPlanTime = pastTime + differenceTime //設定時間
+        //        if(timerPlanTime>=86400){
+        //            timerPlanTime - 86400
+        //        }
         //        println("設定時間:\(timerPlanTime)秒")
         //        println("現在時刻:\(nowSecond)秒")
         onOffFlag = myUserDafault.boolForKey("ONOFF")
         //        println("ONOFFflag:\(onOffFlag)")
+        if(pastTime > nowSecond){
+            var diff = pastTime - nowSecond
+            dayCount += (diff / 86400)+1
+        }
         //アラートからきた場合
-        if(planTime<=nowSecond && bgFlag==false && onOffFlag==true){
+        if(planTime<=(nowSecond+(86400*dayCount)) && bgFlag==false && onOffFlag==true){
             println("アラートからきましたね")
-//            var label:UILabel = UILabel()
-//            label.frame = CGRect(x: 30.0, y: 30.0, width:200.0, height:200.0);
-//            label.text = "アラートからきましたね"
-//            self.view.addSubview(label)
+            //            var label:UILabel = UILabel()
+            //            label.frame = CGRect(x: 30.0, y: 30.0, width:200.0, height:200.0);
+            //            label.text = "アラートからきましたね"
+            //            self.view.addSubview(label)
             musicStart()
         }
+        dayCount = 0
     }
     
     ////////////////////////////////////////////////
@@ -870,9 +886,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             timeDifference = Int(numberConversion(Double(timeDifference)))
             timeDifference = 86400 - timeDifference
         }
-//        if(timeDifference==0){
-//            timeDifference = 0
-//        }
+        //        if(timeDifference==0){
+        //            timeDifference = 0
+        //        }
         println("planは \(planComps.hour):\(planComps.minute):00")
         println("planを秒にすると\(planTimeSecond)");
         println("時差は\(timeDifference)");
@@ -981,7 +997,13 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     func objectMake(){
         let lm = LangManager()
         onOffFlag = myUserDafault.boolForKey("ONOFF")
-
+        
+        //        bellImageView = UIImageView(frame: CGRectMake(0,0,30,30))
+        //        bellImageView.image = bellImage
+        //        bellImageView.layer.position = CGPoint(x: self.view.bounds.width/2, y: 10.0)
+        //        bellImageView.layer.zPosition = 5
+        //        self.view.addSubview(bellImageView)
+        
         // 設定時間ラベル作成
         var hou = myUserDafault.integerForKey("SET_HOUR")
         var min = myUserDafault.integerForKey("SET_MINUTE")
@@ -1028,7 +1050,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         //        pointLabel.font = UIFont.boldSystemFontOfSize(20)
         pointLabel.font = UIFont.systemFontOfSize(20)
         //        pointLabel.font = UIFont(name: "ChalkboardSE-Bold", size: 20)
-        pointLabel.layer.position = CGPoint(x: winSize.width/2 + 80, y:winSize.height/2)
+        pointLabel.layer.position = CGPoint(x: winSize.width/2 + 80, y:winSize.height/2 - 2)
         pointLabel.layer.zPosition = 2
         pointLabel.textColor = UIColor.hexStr(colorCode, alpha: 1)
         lifePoints = myUserDafault.integerForKey("LIFE")
@@ -1047,23 +1069,26 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         
         //音楽選択ボタン作成
         musicSelectBtn = UIButton(frame: CGRectMake(0, 0, 40, 40))
-        musicSelectBtn.setTitle("♪", forState: .Normal)
+        //        musicSelectBtn.setTitle("♪", forState: .Normal)
         musicSelectBtn.addTarget(self, action: "moveCellView", forControlEvents:.TouchUpInside)
-        //        musicSelectBtn.layer.borderWidth = 1
-        //        musicSelectBtn.layer.borderColor = UIColor(white: 1.0, alpha: 1.0).CGColor
-        //        musicSelectBtn.layer.cornerRadius = 3
         musicSelectBtn.layer.position = CGPoint(x: winSize.width - 20,y: winSize.height/2 + 50);
         musicSelectBtn.layer.zPosition = 2
         musicSelectBtn.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 0.3)
-        
-        musicSelectView = UIView(frame: CGRectMake(0,0,winSize.width/2,winSize.height*3/4))
+        //        musicSelectBtn.setImage(UIImage(CIImage: musicSelectCIImage), forState: .Normal)
+        //        musicSelectView = UIView(frame: CGRectMake(0,0,winSize.width/2,winSize.height*3/4))
         //        musicSelectView.layer.masksToBounds = true
-        musicSelectView.backgroundColor = UIColor.hexStr("34495e", alpha: 0.7)
-        musicSelectView.layer.zPosition = 3
+        //        musicSelectView.backgroundColor = UIColor.hexStr("34495e", alpha: 0.7)
+        //        musicSelectView.layer.zPosition = 3
         //flameLabel.layer.cornerRadius = 5
         //        musicSelectWindow.layer.opacity = 0.8
-        musicSelectView.layer.position = CGPoint(x: self.winSize.width*5/4,y: self.winSize.height*5/8)
+        //        musicSelectView.layer.position = CGPoint(x: self.winSize.width*5/4,y: self.winSize.height*5/8)
         
+        // UIImageViewを作成する.
+        myImageView = UIImageView(frame: CGRectMake(0,0,20,20))
+        let myImage = UIImage(named: "musicLibrary.png")
+        myImageView.layer.zPosition = 2
+        myImageView.image = myImage
+        myImageView.layer.position = CGPoint(x: winSize.width - 20,y: winSize.height/2 + 50)
         
         // Stepperの作成する
         lifeStepper = UIStepper()
@@ -1115,22 +1140,22 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         //        runUIImage.layer.position = CGPoint(x: winSize.width - 25, y: winSize.height - 50)
         
         //足跡アイコン
-        footUIImage = UIImageView(frame: CGRectMake(0, 0, 25, 25))
-        footUIImage.image = UIImage(CIImage: footCIImage)
+        footUIImage = UIImageView(frame: CGRectMake(0, 0, 30, 30))
+        footUIImage.image = footImage
         footUIImage.layer.position = CGPoint(x: winSize.width/2 + 58, y: winSize.height/2 - 2)
         footUIImage.layer.zPosition = 2
         
         //アラームアイコン
-        alarmUIImage = UIImageView(frame: CGRectMake(0, 0, 30, 30))
-        alarmUIImage.image = UIImage(CIImage: alarmOffCIImage)
-        alarmUIImage.layer.position = CGPoint(x: 70, y: winSize.height/2 - 2)
-        alarmUIImage.layer.zPosition = 2
+        bellImageView = UIImageView(frame: CGRectMake(0, 0, 30, 30))
+        bellImageView.image = bellOffImage
+        bellImageView.layer.position = CGPoint(x: 70, y: winSize.height/2 - 2)
+        bellImageView.layer.zPosition = 2
         
         //チュートリアルボタン作成
         tutorialBtn = UIButton(frame: CGRectMake(0, 0, 30, 30))
         tutorialBtn.layer.position = CGPoint(x: winSize.width - 30, y:winSize.height/2 - 2)
         tutorialBtn.layer.zPosition = 2
-        tutorialBtn.setImage(UIImage(CIImage: howtoOpenCIImage), forState: .Normal)
+        tutorialBtn.setImage(howtoOpenImage, forState: .Normal)
         //        tutorialBtn.layer.borderWidth = 0.7
         //        tutorialBtn.layer.borderColor = UIColor(white: 1.0, alpha: 1.0).CGColor
         //        tutorialBtn.layer.cornerRadius = 3.0
@@ -1177,8 +1202,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         wrapperView.tintColor = UIColor.whiteColor()
         
         // タップを認識.
-        let myTap = UITapGestureRecognizer(target: self, action: "anyTapGesture:")
-        self.view.addGestureRecognizer(myTap)
+        //        let myTap = UITapGestureRecognizer(target: self, action: "anyTapGesture:")
+        //        self.view.addGestureRecognizer(myTap)
         
         
         // Viewに追加する.
@@ -1194,10 +1219,11 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         self.view.addSubview(giveUpBtn)
         self.view.addSubview(tutorialBtn)
         self.view.addSubview(musicSelectBtn)
+        self.view.addSubview(myImageView)
         
         self.view.addSubview(pointLabel)
         self.view.addSubview(footUIImage)
-        self.view.addSubview(alarmUIImage)
+        self.view.addSubview(bellImageView)
         self.view.addSubview(alarmSwitch)
         //        self.view.addSubview(stepSlider)
         self.view.addSubview(setTimeLabel)
@@ -1220,8 +1246,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             giveUpBtn.layer.zPosition = 3 //ギブアップボタン浮上
             giveUpBtn.layer.hidden = false
             effectView.layer.zPosition = 1 //Blur浮上
-            alarmUIImage.layer.zPosition = -1 //アラームアイコンさよなら
+            bellImageView.layer.zPosition = -1 //アラームアイコンさよなら
             musicSelectBtn.layer.zPosition = -1
+            myImageView.layer.zPosition = -1
             
             //押せるようにする
             giveUpBtn.enabled = true
@@ -1239,8 +1266,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             giveUpBtn.layer.zPosition = -1 //ギブアップボタンさよなら
             giveUpBtn.layer.hidden = true
             effectView.layer.zPosition = -1 //Blurさよなら
-            alarmUIImage.layer.zPosition = 2 //アラームアイコン浮上
+            bellImageView.layer.zPosition = 2 //アラームアイコン浮上
             musicSelectBtn.layer.zPosition = 1
+            myImageView.layer.zPosition = 1
             
             //押せるようにする
             alarmSwitch.enabled = true
@@ -1253,11 +1281,11 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         
         //アラームオンなら
         if(onOffFlag == true){
-            alarmUIImage.image = UIImage(CIImage: alarmOnCIImage)
+            bellImageView.image = bellOnImage
             setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
         else {
-            alarmUIImage.image = UIImage(CIImage: alarmOffCIImage)
+            bellImageView.image = bellOffImage
             setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
         }
         bgColorChange()
@@ -1276,17 +1304,17 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         var r: [CGFloat]!
         var g: [CGFloat]!
         var b: [CGFloat]!
-        if(lifePoints>2){
+        if(lifePoints>14){ //満タン15で緑
+            r = [0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            g = [0.0, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            b = [0.1, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        }
+        else if(lifePoints>2){ //3以上で青
             r = [0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             g = [0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             b = [0.2, CGFloat(lifePoints/50), 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         }
-            //        else if(lifePoints>2){
-            //            r = [0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            //            g = [0.2, CGFloat(lifePoints/30), 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            //            b = [0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            //        }
-        else {
+        else { //2以下で赤
             r = [0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             g = [0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             b = [0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
