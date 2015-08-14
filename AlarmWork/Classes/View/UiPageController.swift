@@ -42,8 +42,6 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     var eButton: UIButton!
     var titleLabel: UILabel!
     
-    //バナー広告準備
-    var bannerView: GADBannerView = GADBannerView()
     //バナー広告クラス宣言
     var ab: AdmobBanner!
     
@@ -129,8 +127,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         
         
         if(myUserDefault.boolForKey("RegularUser_Ads")){
-            adbannerOpen() //バナー広告表示
-//            ab.adbannerOpen() //バナー広告表示
+            ab.adbannerOpen() //バナー広告表示
         }
         self.myUserDafault.setBool(true, forKey: "RegularUser_Ads")
         self.myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
@@ -326,7 +323,6 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         if fmod(scrollView.contentOffset.x, scrollView.frame.maxX) == 0 {
             // ページの場所を切り替える.
             pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.frame.maxX)
-            //            println(pageControl.currentPage)
             timerManager() //タイマー管理処理
             switch pageControl.currentPage{
             case 3:
@@ -369,13 +365,10 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         else {
             self.myUserDafault.setInteger(2, forKey: "TUTORIALLIFE")
             self.myUserDafault.synchronize()
-            if(walkTestTimer == nil){ //ないので生成します
+            if(walkTestTimer == nil || walkTestTimer.valid == false){ //ないので生成します,あるっぽいけど動いてないっぽいので生成します
                 walkTestTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "walkTestUpdate", userInfo: nil, repeats: true)
             }
-            if(walkTestTimer.valid == false){ //あるっぽいけど動いてないっぽいので生成します
-                walkTestTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "walkTestUpdate", userInfo: nil, repeats: true)
-            }
-            if(myUserDafault.boolForKey("bgm")){
+            if(myUserDafault.boolForKey("bgm") == true){
                 volumeChange.systemVolumeChange(0.8)
             }
         }
@@ -390,19 +383,6 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             myUserDafault.synchronize()
         }
         self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    func adbannerOpen(){
-        bannerView = GADBannerView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        bannerView.adUnitID = "ca-app-pub-1645837363749700/1318708476" // ユニットID
-        bannerView.rootViewController = self
-        bannerView.layer.position = CGPoint(x: winSize.width/2, y: winSize.height - 25)
-        self.view.addSubview(bannerView)
-        
-//        var request = GADRequest()
-//        request.testDevices = ["9e51e86223f362580ae947fffea1b3e8"]
-//        bannerView.loadRequest(request) //テスト用
-
-        bannerView.loadRequest(GADRequest()) //本番用
     }
     
     func titleSetting(){

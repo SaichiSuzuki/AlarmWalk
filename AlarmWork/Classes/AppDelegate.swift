@@ -11,13 +11,29 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    var window: UIWindow?
-    //1行追加
-    var myNavigationController: UINavigationController?
+//    var window: UIWindow?
+//    //1行追加
+//    var myNavigationController: UINavigationController?
+    
+    var window: UIWindow? = nil
+    var navCon : UINavigationController? = nil
+    var mainView : EditViewController? = nil
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         UIApplication.sharedApplication().idleTimerDisabled = true //スリープしないように
+        
+        //メインコントローラー(ホーム画面となる)
+        self.mainView = EditViewController();
+        
+        //ナビゲーションコントローラー
+        self.navCon = UINavigationController(rootViewController: mainView!)
+        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window?.backgroundColor = UIColor.whiteColor()
+        self.window?.rootViewController = navCon!
+        self.window?.makeKeyAndVisible()
+
         return true
     }
     func applicationWillResignActive(application: UIApplication) {

@@ -15,7 +15,6 @@ class FirstClass{
             return true
         }
         else{
-            println("初期設定を行います")
             myUserDefault.setBool(true, forKey: "PLAY_BOY")
             myUserDefault.synchronize()
             

@@ -29,7 +29,6 @@ class AdmobInterstitial: UIResponder{
         //本番用
         interstitial.adUnitID = "ca-app-pub-1645837363749700/5447856877"
         interstitial.loadRequest(GADRequest())
-        println("準備完了")
         //テスト用
         //var request = GADRequest()
         //request.testDevices = ["9e51e86223f362580ae947fffea1b3e8"]

@@ -52,7 +52,6 @@ class LangManager {
             //add
             lang[14] = ("GoodMorning! 歩いてください")
         }
-        println("lang読み込み完了")
     }
     func getString(num:Int) ->String{
         return lang[num]
