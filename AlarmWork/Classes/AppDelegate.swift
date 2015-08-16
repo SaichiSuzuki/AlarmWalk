@@ -22,9 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         UIApplication.sharedApplication().idleTimerDisabled = true //スリープしないように
-        let ud = NSUserDefaults.standardUserDefaults()
-        ud.setObject("village", forKey: "MUSIC_NAME")
-        ud.synchronize()
         //メインコントローラー(ホーム画面となる)
         self.mainView = EditViewController();
         
@@ -74,12 +71,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(application: UIApplication) {
+//        println("\nバックグラウンドから復帰")
+        mainView!.alertComeCheck()
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
+//        println("\nアクティブになりました")
+        mainView!.alertComeCheck()
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        //println("\nアクティブになりました")
         //musicCome()
     }
     func musicCome(){
@@ -127,4 +127,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+        //通知仕込みのタイミングアプリから出るときにする？そのとき一回リセットした方がいい？
 }

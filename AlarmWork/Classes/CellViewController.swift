@@ -80,10 +80,23 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         allCellAction(tableView,type: "color")
         musicSave(indexPath.row)
         let ud = NSUserDefaults.standardUserDefaults()
-        ud.setObject(indexPath.row, forKey: "INDEX_PATH")
+        ud.setInteger(indexPath.row, forKey: "INDEX_PATH")
         ud.synchronize()
         
-        //こっちにいても鳴るかどうか？多分なりそう
+        
+        if(ud.boolForKey("ONOFF") == true){
+            let qualityOfServiceClass = DISPATCH_QUEUE_PRIORITY_DEFAULT
+            let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+            dispatch_async(backgroundQueue, {
+                // Backgroundで行いたい重い処理はここ
+                dispatch_async(dispatch_get_main_queue(), {
+                    // 処理が終わった後UIスレッドでやりたいことはここ
+                    var app:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    app.mainView?.pushNotification()
+                })
+            })
+        }
+        
         
     }
     
@@ -149,7 +162,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //試聴ボタン追加
         audienceButton = UIButton(frame: CGRectMake(0, 0, 50, 45))
-//        audienceButton.layer.backgroundColor = UIColor.redColor().CGColor!
+        //        audienceButton.layer.backgroundColor = UIColor.redColor().CGColor!
         audienceButton.setTitle("♪", forState: .Normal)
         //        audienceButton.setImage(UIImage(CIImage: playBackCIImage), forState: .Normal)
         audienceButton.addTarget(self, action: "musicAudition:", forControlEvents:.TouchUpInside)
@@ -207,37 +220,38 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     //音楽選択ボタン
-//    func musicSelectAction(cellNum:Int){
-//        musicSave(cellNum)
-//    }
+    //    func musicSelectAction(cellNum:Int){
+    //        musicSave(cellNum)
+    //    }
     func musicSave(num:Int){
-        var bgName = "nil"
-        var n = num
-        while(bgName == "nil"){
-            bgName = selectBGM(n)
-            n = Int(arc4random() % UInt32(myItems.count))
-        }
+        var bgName = selectBGM(num)
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setObject(bgName, forKey: "MUSIC_NAME")
         ud.synchronize()
     }
     func selectBGM(num:Int) -> String{
+        let ud = NSUserDefaults.standardUserDefaults()
+        ud.setBool(false, forKey: "IS_RAND")
+        ud.synchronize()
         var bgName = ""
         switch num{
         case 0:
-        bgName = "You_wanna_fightC"
+            bgName = "You_wanna_fightC"
             break
         case 1:
-        bgName = "Electron"
+            bgName = "Electron"
             break
         case 2:
-        bgName = "Yukai"
+            bgName = "Yukai"
             break
         case 3:
-        bgName = "Labo"
+            bgName = "Labo"
             break
         default:
-            bgName = "nil"
+            let rm = RandMusic()
+            bgName = rm.getRandMusic()
+            ud.setBool(true, forKey: "IS_RAND")
+            ud.synchronize()
             break
         }
         return bgName

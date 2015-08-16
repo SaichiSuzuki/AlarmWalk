@@ -40,6 +40,7 @@ struct AVAudioPlayerUtil {
     }
     static func play(){
         let musicNameStrPlay:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+        println("曲名:\(musicNameStrPlay)")
         AVAudioPlayerUtil.setValue(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStrPlay, ofType: "caf")!)!);//ファイルセット（再生前事前準備）
         AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
         AVAudioSession.sharedInstance().setActive(true, error: nil)
