@@ -14,19 +14,39 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     private var myItems: [String] = ["You_wanna_fight","Electron","Yukai","Labo","Random"]
     private var myTableView: UITableView!
     
-    //試聴中かどうかフラグ
-    var audienceFlag = false
-    //試聴用ボタン
-    var audienceButton: UIButton!
-    //音楽なってるかチェックタイマー
-    var isMusicCheckTimer: NSTimer!
-    //再生ボタン
-    //    let playBackCIImage = CIImage(image: UIImage(named: "playBack.png"))
+    private let lm:LangManager = LangManager()
     
+    //試聴中かどうかフラグ
+    private var audienceFlag = false
+    //試聴用ボタン
+    private var audienceButton: UIButton!
+    //音楽なってるかチェックタイマー
+    private var isMusicCheckTimer: NSTimer!
+    //再生ボタン
+    private var cellHeight:CGFloat = 0
+    //課金ボタン
+    private var purchaseBtn: UIButton!
+    //値段
+    var priceStr = ""
+
+
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        let ud = NSUserDefaults.standardUserDefaults()
+        if(ud.boolForKey("PURCHASE_MUSIC") == false){ //課金してなかったら
+            createPurchaseBtn()
+        }
+        getPrice()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeCell()
+        createCell()
         isMusicCheckTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "isMusicCheck", userInfo: nil, repeats: true)
+        //通信できれば価格取得する
+        if IJReachability.isConnectedToNetwork() {
+            getPrice()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -34,37 +54,109 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.navCon?.setNavigationBarHidden(false, animated: false)
         appDelegate.navCon?.navigationBar.tintColor = UIColor.darkGrayColor() //戻る文字色変更
-        let lm = LangManager()
         for (index,n) in enumerate(lm.getMusicName()){
             myItems[index] = n
         }
     }
     
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    /**ナビゲーションバーの高さ取得*/
+    func navigationBarHeight(callFrom: UIViewController) -> CGFloat? {
+        return callFrom.navigationController?.navigationBar.frame.size.height
+    }
+    
+    /**課金ボタン作成*/
+    func createPurchaseBtn(){
+        purchaseBtn = UIButton(frame: CGRectMake(0, 0, view.bounds.width, cellHeight*4))
+        purchaseBtn.layer.anchorPoint = CGPoint(x: 0,y: 0)
+        purchaseBtn.layer.position = CGPoint(x: 0,y:cellHeight)
+        purchaseBtn.setTitle("Unlock", forState: .Normal)
+        purchaseBtn.layer.backgroundColor = UIColor.hexStr("dd2234", alpha: 0.3).CGColor
+        purchaseBtn.addTarget(self, action: "unLock:", forControlEvents:.TouchUpInside)
+        self.myTableView.addSubview(purchaseBtn)
+    }
+    
+    /**課金誘導*/
+    func unLock(sender: UIButton){
+        reachabilityCheck()
+    }
+    func unLockAlart(){
+        let alert:UIAlertController = UIAlertController(title:lm.getString(15),
+            message: priceStr,
+            preferredStyle: UIAlertControllerStyle.Alert)
+        let cancelAction:UIAlertAction = UIAlertAction(title: "Cancel",
+            style: UIAlertActionStyle.Cancel,
+            handler:{
+                (action:UIAlertAction!) -> Void in
+        })
+        let defaultAction:UIAlertAction = UIAlertAction(title: "OK",
+            style: UIAlertActionStyle.Default,
+            handler:{
+                (action:UIAlertAction!) -> Void in
+                let pc = PurchaseController(v: self)
+                pc.purchase()
+        })
+        alert.addAction(cancelAction)
+        alert.addAction(defaultAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func getPrice(){
+        let productIdentifiers = ["SELECT_MUSIC"]
+        //プロダクト情報取得
+        SORProductManager.productsWithProductIdentifiers(productIdentifiers,
+            completion: { (products, error) -> Void in
+                for product in products {
+                    //価格を抽出
+                    let priceString = SORProductManager.priceStringFromProduct(product)
+                    /*
+                    価格情報を使って表示を更新したり。
+                    */
+                    self.priceStr = priceString
+                }
+        })
+    }
+    
+    func reachabilityCheck () {
+        if IJReachability.isConnectedToNetwork() {
+            unLockAlart()
+        } else {
+            let alert = UIAlertView()
+            alert.title = lm.getString(16)
+            alert.message = lm.getString(17)
+            alert.addButtonWithTitle("OK")
+            alert.show()
+        }
+    }
+    
     /**セル作成*/
-    func makeCell(){
+    func createCell(){
         // Status Barの高さを取得する.
         let barHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
         // Viewの高さと幅を取得する.
         let displayWidth: CGFloat = self.view.frame.width
         let displayHeight: CGFloat = self.view.frame.height
-        // TableViewの生成する(status barの高さ分ずらして表示).
         myTableView = UITableView(frame: CGRect(x: 0, y: 0, width: displayWidth, height: displayHeight))
-        // Cell名の登録をおこなう.
         myTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
-        // DataSourceの設定をする.
         myTableView.dataSource = self
-        // Delegateを設定する.
         myTableView.delegate = self
-        //        myTableView.layer.position = CGPoint(x: winSize.width*(3/2),y: winSize.height/2);
         myTableView.backgroundColor = UIColor.hexStr("34495e", alpha: 1.0)
         // Viewに追加する.
         self.view.addSubview(myTableView)
     }
+    
+    // テーブルビューセルの高さ設定
+//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        if indexPath.section == 0 {
+//            let widthOfScreen = UIScreen.mainScreen().bounds.width
+//            return widthOfScreen / 8
+//        } else {
+//            return -1
+//        }
+//    }
     
     
     /*
@@ -83,7 +175,6 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         ud.setInteger(indexPath.row, forKey: "INDEX_PATH")
         ud.synchronize()
         
-        
         if(ud.boolForKey("ONOFF") == true){
             let qualityOfServiceClass = DISPATCH_QUEUE_PRIORITY_DEFAULT
             let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
@@ -96,8 +187,6 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
                 })
             })
         }
-        
-        
     }
     
     /**全てのセルに対する処理*/
@@ -152,7 +241,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // 再利用するCellを取得する.
         let cell = tableView.dequeueReusableCellWithIdentifier("MyCell", forIndexPath: indexPath) as! UITableViewCell
-        
+        cellHeight = cell.bounds.height
         // Cellに値を設定する.
         cell.textLabel!.text = "\(myItems[indexPath.row])"
         cell.backgroundColor = UIColor.hexStr("34495e", alpha: 0.7)
@@ -257,6 +346,13 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         return bgName
     }
     
+    //////////////////////////////////////
+    /////////// getter,setter ////////////
+    //////////////////////////////////////
+    
+    internal func getPurchaseBtn() -> UIButton{
+        return purchaseBtn
+    }
     
 }
 

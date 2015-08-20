@@ -18,8 +18,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     class func instance() -> Self {
         return self()
     }
-    
-    
     /**Admobインタースティシャルクラス宣言*/
     var ai:AdmobInterstitial!
     
@@ -282,7 +280,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             bellImageView.image = bellOffImage
             setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
             UIView.animateWithDuration(1.0, animations: {() -> Void in
-                self.mannerModeLabel.center = CGPoint(x: -150,y: self.winSize.height/2 + 40)
+                self.mannerModeLabel.center = CGPoint(x: -self.mannerModeLabel.bounds.width,y: self.winSize.height/2 + 40)
                 }, completion: {(Bool) -> Void in
                     self.mannerModeLabel.text = lm.getString(11)
             })
@@ -414,6 +412,10 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        //課金リセット
+//        let ud = NSUserDefaults.standardUserDefaults()
+//        ud.setBool(false, forKey: "PURCHASE_MUSIC")
+//        ud.synchronize()
         //        removeFromParentViewController() //とりあえずなんか解放できるかも navigationbar使えなくなる
         self.ai = AdmobInterstitial(view: self) //Admobインタースティシャルインスタンスを生成
         //        println(myUserDafault.integerForKey("TUTORIALLIFE"))
@@ -1164,7 +1166,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         mannerModeLabel.font = UIFont.systemFontOfSize(12)
         mannerModeLabel.layer.cornerRadius = 2
         mannerModeLabel.layer.opacity = 0.6
-        mannerModeLabel.layer.position = CGPoint(x: -150, y:winSize.height/2 + 40)
+        mannerModeLabel.layer.position = CGPoint(x: -self.mannerModeLabel.bounds.width, y:winSize.height/2 + 40)
         
         //        //歩幅調整スライダー
         //        stepSlider = UISlider(frame: CGRectMake(0, 0, winSize.width-100, 40))
@@ -1639,7 +1641,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             mannerCautionTimer.invalidate()
             mannerCautionTimer = nil
             UIView.animateWithDuration(1.0, animations: {() -> Void in
-                self.mannerModeLabel.center = CGPoint(x: -150,y: self.winSize.height/2 + 40)
+                self.mannerModeLabel.center = CGPoint(x: -self.mannerModeLabel.bounds.width,y: self.winSize.height/2 + 40)
                 }, completion: {(Bool) -> Void in
                     self.mannerModeLabel.text = lm.getString(11)
             })

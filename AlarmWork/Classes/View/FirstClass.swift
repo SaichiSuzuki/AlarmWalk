@@ -55,6 +55,9 @@ class FirstClass{
             //プッシュ通知初期化
             myUserDafault.setBool(false, forKey: "PUSH")
             myUserDafault.synchronize()
+            //課金初期化
+            myUserDafault.setBool(false, forKey: "PURCHASE_MUSIC")
+            myUserDafault.synchronize()
             
             return false
         }

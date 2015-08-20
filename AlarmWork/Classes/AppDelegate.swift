@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import StoreKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegate {
     
 //    var window: UIWindow?
 //    //1行追加
@@ -32,6 +33,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.backgroundColor = UIColor.whiteColor()
         self.window?.rootViewController = navCon!
         self.window?.makeKeyAndVisible()
+
+        //課金処理
+        // デリゲート設定
+        SORPurchaseManager.sharedManager().delegate = self
+        // オブザーバー登録
+        SKPaymentQueue.defaultQueue().addTransactionObserver(SORPurchaseManager.sharedManager())
+
 
         return true
     }
@@ -126,6 +134,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UIApplication.sharedApplication().scheduleLocalNotification(myNotification)
             }
         }
+        
+        // オブザーバー登録解除(課金関係)
+        SKPaymentQueue.defaultQueue().removeTransactionObserver(SORPurchaseManager.sharedManager())
     }
-        //通知仕込みのタイミングアプリから出るときにする？そのとき一回リセットした方がいい？
+    
+    func purchaseManager(purchaseManager: SORPurchaseManager!, didFinishUntreatedPurchaseWithTransaction transaction: SKPaymentTransaction!, decisionHandler: ((complete: Bool) -> Void)!) {
+        //課金終了(前回アプリ起動時課金処理が中断されていた場合呼ばれる)
+        /*
+        
+        
+        コンテンツ解放処理
+        
+        
+        */
+        //コンテンツ解放が終了したら、この処理を実行(true: 課金処理全部完了, false 課金処理中断)
+        decisionHandler(complete: true)
+    }
+
 }

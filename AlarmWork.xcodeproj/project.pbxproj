@@ -19,6 +19,10 @@
 		155A3B711B797EF500B39875 /* CellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B701B797EF500B39875 /* CellViewController.swift */; };
 		155A3C5B1B79D1C600B39875 /* MyScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3C5A1B79D1C600B39875 /* MyScrollView.swift */; };
 		156CDC751B7E25840033C0F6 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156CDC741B7E25840033C0F6 /* NotificationManager.swift */; };
+		157BF6371B82EB3000E7E3C5 /* SORPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157BF6361B82EB3000E7E3C5 /* SORPurchaseManager.swift */; };
+		157BF6391B82EB4700E7E3C5 /* SORProductManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157BF6381B82EB4700E7E3C5 /* SORProductManager.swift */; };
+		157BF63B1B82EBDC00E7E3C5 /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157BF63A1B82EBDC00E7E3C5 /* PurchaseController.swift */; };
+		157C27D71B85773500419A40 /* IJReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157C27D61B85773500419A40 /* IJReachability.swift */; };
 		157CFE291B7D9D5E00D749C7 /* musicLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 157CFE281B7D9D5E00D749C7 /* musicLibrary.png */; };
 		157F04C21B7DD5820009A6CB /* Electron.caf in Resources */ = {isa = PBXBuildFile; fileRef = 157F04BF1B7DD5780009A6CB /* Electron.caf */; };
 		157F04C41B7DD5820009A6CB /* Yukai.caf in Resources */ = {isa = PBXBuildFile; fileRef = 157F04C11B7DD5780009A6CB /* Yukai.caf */; };
@@ -126,6 +130,10 @@
 		155A3B701B797EF500B39875 /* CellViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellViewController.swift; sourceTree = "<group>"; };
 		155A3C5A1B79D1C600B39875 /* MyScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyScrollView.swift; sourceTree = "<group>"; };
 		156CDC741B7E25840033C0F6 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		157BF6361B82EB3000E7E3C5 /* SORPurchaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SORPurchaseManager.swift; sourceTree = "<group>"; };
+		157BF6381B82EB4700E7E3C5 /* SORProductManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SORProductManager.swift; sourceTree = "<group>"; };
+		157BF63A1B82EBDC00E7E3C5 /* PurchaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
+		157C27D61B85773500419A40 /* IJReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IJReachability.swift; sourceTree = "<group>"; };
 		157CFE281B7D9D5E00D749C7 /* musicLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicLibrary.png; sourceTree = "<group>"; };
 		157F04BF1B7DD5780009A6CB /* Electron.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Electron.caf; sourceTree = "<group>"; };
 		157F04C11B7DD5780009A6CB /* Yukai.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Yukai.caf; sourceTree = "<group>"; };
@@ -250,6 +258,7 @@
 		155A3B631B75F98500B39875 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				157C27D61B85773500419A40 /* IJReachability.swift */,
 				155A3B691B75FA9B00B39875 /* FirstClass.swift */,
 				155A3B641B75F99200B39875 /* HexColor.swift */,
 				157F04CA1B7DF9FE0009A6CB /* RandMusic.swift */,
@@ -257,6 +266,16 @@
 				155A3B651B75F99200B39875 /* SystemVolumeController.swift */,
 			);
 			name = Tools;
+			sourceTree = "<group>";
+		};
+		157BF6351B82EB1C00E7E3C5 /* Purchase */ = {
+			isa = PBXGroup;
+			children = (
+				157BF63A1B82EBDC00E7E3C5 /* PurchaseController.swift */,
+				157BF6361B82EB3000E7E3C5 /* SORPurchaseManager.swift */,
+				157BF6381B82EB4700E7E3C5 /* SORProductManager.swift */,
+			);
+			name = Purchase;
 			sourceTree = "<group>";
 		};
 		15D36A9B1B6DF187001AE571 /* View */ = {
@@ -364,6 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				9A2CEDE11ABFCF370078A7AB /* AppDelegate.swift */,
+				157BF6351B82EB1C00E7E3C5 /* Purchase */,
 				155A3B631B75F98500B39875 /* Tools */,
 				1552776E1B758A1000BFC42A /* Ads */,
 				15D36A9B1B6DF187001AE571 /* View */,
@@ -637,11 +657,15 @@
 			files = (
 				9A2CEDEE1ABFCF370078A7AB /* MusicController.swift in Sources */,
 				155A3C5B1B79D1C600B39875 /* MyScrollView.swift in Sources */,
+				157BF6391B82EB4700E7E3C5 /* SORProductManager.swift in Sources */,
 				155A3B6D1B75FA9B00B39875 /* UiPageController.swift in Sources */,
 				9A2CEDEA1ABFCF370078A7AB /* AppDelegate.swift in Sources */,
 				156CDC751B7E25840033C0F6 /* NotificationManager.swift in Sources */,
 				155A3B671B75F99200B39875 /* SystemVolumeController.swift in Sources */,
 				155A3B6C1B75FA9B00B39875 /* FirstClass.swift in Sources */,
+				157BF6371B82EB3000E7E3C5 /* SORPurchaseManager.swift in Sources */,
+				157C27D71B85773500419A40 /* IJReachability.swift in Sources */,
+				157BF63B1B82EBDC00E7E3C5 /* PurchaseController.swift in Sources */,
 				155A3B601B75F94B00B39875 /* AdmobInterstitial.swift in Sources */,
 				155A3B5F1B75F94B00B39875 /* AdmobBanner.swift in Sources */,
 				155A3B6F1B75FAB900B39875 /* LangManager.swift in Sources */,

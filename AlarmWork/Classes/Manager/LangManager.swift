@@ -30,6 +30,10 @@ class LangManager {
         //AppDelegate
         lang.append("Please walked to start the app")
         lang.append("GoodMorning! Let's walking")
+        //Purchase
+        lang.append("Unlock music")
+        lang.append("Connection error")
+        lang.append("Connection situation is not good. After checking the radio wave environment, please try again.")
         
         var myUserDafault:NSUserDefaults = NSUserDefaults()
         if(myUserDafault.integerForKey("LANGUAGE") == 1){ //Japanese
@@ -50,8 +54,11 @@ class LangManager {
             lang[12] = ("おきましたか？")
             //AppDelegate
             lang[13] = ("アプリを起動して歩いてください")
-            //add
             lang[14] = ("GoodMorning! 歩いてください")
+            //Purchase
+            lang[15] = ("音楽解放")
+            lang[16] = ("通信エラー")
+            lang[17] = ("通信状況がよくありません。電波環境を確認後、再度お試しください。")
         }
     }
     func getString(num:Int) ->String{
