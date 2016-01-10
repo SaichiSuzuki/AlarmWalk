@@ -19,7 +19,7 @@ class AdmobInterstitial: UIResponder{
     init(view: UIViewController){
         super.init()
         self.view = view //viewを取得
-        var viewController = view as! EditViewController //ダウンキャスト
+        let viewController = view as! EditViewController //ダウンキャスト
         self.interstitial = viewController.interstitialData //interstitial取得
         admobInterstitialReady() //広告使用準備
     }
@@ -27,12 +27,11 @@ class AdmobInterstitial: UIResponder{
     //admobインタースティシャル準備
     func admobInterstitialReady(){
         //本番用
-        interstitial.adUnitID = "ca-app-pub-1645837363749700/5447856877"
-        interstitial.loadRequest(GADRequest())
+//        interstitial.loadRequest(GADRequest())
         //テスト用
-        //var request = GADRequest()
-        //request.testDevices = ["9e51e86223f362580ae947fffea1b3e8"]
-        //interstitial.loadRequest(request)
+        let request = GADRequest()
+        request.testDevices = ["9e51e86223f362580ae947fffea1b3e8"]
+        interstitial.loadRequest(request)
     }
     
     /**インタースティシャル広告表示*/

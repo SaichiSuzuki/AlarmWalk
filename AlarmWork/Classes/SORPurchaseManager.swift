@@ -52,7 +52,7 @@ class SORPurchaseManager : NSObject,SKPaymentTransactionObserver {
         }
         
         //未処理のトランザクションがあればそれを利用
-        let transactions = SKPaymentQueue.defaultQueue().transactions as! [SKPaymentTransaction]
+        let transactions = SKPaymentQueue.defaultQueue().transactions 
         if transactions.count > 0 {
             for transaction in transactions {
                 if transaction.transactionState != .Purchased {
@@ -94,9 +94,9 @@ class SORPurchaseManager : NSObject,SKPaymentTransactionObserver {
     }
     
     // MARK: - SKPaymentTransactionObserver
-    func paymentQueue(queue: SKPaymentQueue!, updatedTransactions transactions: [AnyObject]!) {
+    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         //課金状態が更新されるたびに呼ばれる
-        for transaction in transactions as! [SKPaymentTransaction] {
+        for transaction in transactions {
             switch transaction.transactionState {
             case .Purchasing :
                 //課金中
@@ -123,13 +123,13 @@ class SORPurchaseManager : NSObject,SKPaymentTransactionObserver {
         }
     }
     
-    func paymentQueue(queue: SKPaymentQueue!, restoreCompletedTransactionsFailedWithError error: NSError!) {
+    func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
         //リストア失敗時に呼ばれる
         self.delegate?.purchaseManager?(self, didFailWithError: error)
         self.isRestore = false
     }
     
-    func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue!) {
+    func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
         //リストア完了時に呼ばれる
         self.delegate?.purchaseManagerDidFinishRestore?(self)
         self.isRestore = false

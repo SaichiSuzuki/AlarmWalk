@@ -11,7 +11,7 @@ import UIKit
 /**ScrollViewを使用してもtouch検出ができるようにしたクラス*/
 class MyScrollView: UIScrollView {
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         superview?.touchesBegan(touches, withEvent: event)
     }
     

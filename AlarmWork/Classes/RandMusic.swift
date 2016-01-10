@@ -12,7 +12,7 @@ class RandMusic{
     }
     func getRandMusic() -> String{
         var bgName = ""
-        var rand = arc4random() % 4
+        let rand = arc4random() % 4
         switch Int(rand){
         case 0:
             bgName = "You_wanna_fightC"

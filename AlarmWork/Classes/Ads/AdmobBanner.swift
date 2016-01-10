@@ -23,7 +23,7 @@ class AdmobBanner: UIResponder{
         bannerView = GADBannerView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         bannerView.adUnitID = "ca-app-pub-1645837363749700/1318708476" // ユニットID
         bannerView.rootViewController = view
-        var viewController = view as! UiPageController //ダウンキャスト
+        let viewController = view as! UiPageController //ダウンキャスト
         bannerView.layer.position = CGPoint(x: viewController.winSizeData.width/2, y: viewController.winSizeData.height - 25)
         viewController.view.addSubview(bannerView)
         //        var request = GADRequest()

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import StoreKit //←インポートしてください
+import StoreKit //フレームワークインポートする
 
 class PurchaseController: UIResponder, SORPurchaseManagerDelegate {
     private var uiv:UIViewController = UIViewController()
@@ -41,7 +41,7 @@ class PurchaseController: UIResponder, SORPurchaseManagerDelegate {
         appDelegate.navCon?.setNavigationBarHidden(true, animated: false)
         //背景ボタン作成する
         darkBackBtn = UIButton(frame: CGRectMake(0, 0, uiv.view.bounds.width, uiv.view.bounds.height))
-        darkBackBtn.layer.backgroundColor = UIColor.hexStr("3c3c3c", alpha: 0.8).CGColor!
+        darkBackBtn.layer.backgroundColor = UIColor.hexStr("3c3c3c", alpha: 0.8).CGColor
         // インジケータを作成する.
         myActivityIndicator = UIActivityIndicatorView()
         myActivityIndicator.frame = CGRectMake(0, 0, 50, 50)
@@ -57,7 +57,7 @@ class PurchaseController: UIResponder, SORPurchaseManagerDelegate {
     func deleteUI(){
         myActivityIndicator.hidden = true
         darkBackBtn.removeFromSuperview()
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.navCon?.setNavigationBarHidden(false, animated: false)
     }
     
@@ -97,7 +97,7 @@ class PurchaseController: UIResponder, SORPurchaseManagerDelegate {
     
     func purchaseManager(purchaseManager: SORPurchaseManager!, didFailWithError error: NSError!) {
         //課金失敗時に呼び出される
-        var alert = UIAlertView()
+        let alert = UIAlertView()
         alert.title = "Error"
         alert.message = "Please try again"
         alert.addButtonWithTitle("OK")

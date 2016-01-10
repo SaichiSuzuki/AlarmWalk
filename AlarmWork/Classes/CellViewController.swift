@@ -28,8 +28,6 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     private var purchaseBtn: UIButton!
     //値段
     var priceStr = ""
-
-
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -37,25 +35,31 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         if(ud.boolForKey("PURCHASE_MUSIC") == false){ //課金してなかったら
             createPurchaseBtn()
         }
-        getPrice()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         createCell()
         isMusicCheckTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "isMusicCheck", userInfo: nil, repeats: true)
         //通信できれば価格取得する
-        if IJReachability.isConnectedToNetwork() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Online(.WWAN), .Online(.WiFi):
             getPrice()
+            break
+        default:
+            break
         }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewDidDisappear(animated)
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.navCon?.setNavigationBarHidden(false, animated: false)
         appDelegate.navCon?.navigationBar.tintColor = UIColor.darkGrayColor() //戻る文字色変更
-        for (index,n) in enumerate(lm.getMusicName()){
-            myItems[index] = n
+        for (index,n) in lm.getMusicName().enumerate(){
+            if(index < myItems.count){
+                myItems[index] = n
+            }
         }
     }
     
@@ -70,6 +74,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     /**課金ボタン作成*/
     func createPurchaseBtn(){
+        if(purchaseBtn == nil){ //ボタンがなければ
         purchaseBtn = UIButton(frame: CGRectMake(0, 0, view.bounds.width, cellHeight*4))
         purchaseBtn.layer.anchorPoint = CGPoint(x: 0,y: 0)
         purchaseBtn.layer.position = CGPoint(x: 0,y:cellHeight)
@@ -77,6 +82,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         purchaseBtn.layer.backgroundColor = UIColor.hexStr("dd2234", alpha: 0.3).CGColor
         purchaseBtn.addTarget(self, action: "unLock:", forControlEvents:.TouchUpInside)
         self.myTableView.addSubview(purchaseBtn)
+        }
     }
     
     /**課金誘導*/
@@ -90,12 +96,12 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cancelAction:UIAlertAction = UIAlertAction(title: "Cancel",
             style: UIAlertActionStyle.Cancel,
             handler:{
-                (action:UIAlertAction!) -> Void in
+                (action:UIAlertAction) -> Void in
         })
         let defaultAction:UIAlertAction = UIAlertAction(title: "OK",
             style: UIAlertActionStyle.Default,
             handler:{
-                (action:UIAlertAction!) -> Void in
+                (action:UIAlertAction) -> Void in
                 let pc = PurchaseController(v: self)
                 pc.purchase()
         })
@@ -121,14 +127,18 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func reachabilityCheck () {
-        if IJReachability.isConnectedToNetwork() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Online(.WWAN), .Online(.WiFi):
             unLockAlart()
-        } else {
+            break
+        default:
             let alert = UIAlertView()
             alert.title = lm.getString(16)
             alert.message = lm.getString(17)
             alert.addButtonWithTitle("OK")
             alert.show()
+            break
         }
     }
     
@@ -182,7 +192,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // Backgroundで行いたい重い処理はここ
                 dispatch_async(dispatch_get_main_queue(), {
                     // 処理が終わった後UIスレッドでやりたいことはここ
-                    var app:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    let app:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     app.mainView?.pushNotification()
                 })
             })
@@ -191,9 +201,9 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     /**全てのセルに対する処理*/
     func allCellAction(tableView: UITableView,type:String){
-        for (var i=0; i<tableView.numberOfSections(); ++i){
+        for (var i=0; i<tableView.numberOfSections; ++i){
             for (var j=0; j<tableView.numberOfRowsInSection(i); ++j){
-                var c = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: j, inSection: i))
+                let c = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: j, inSection: i))
                 switch type{
                 case "color":
                     colorInit(c!)
@@ -221,7 +231,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     /**Cellの選択がはずれたときに呼び出される*/
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         // 選択されたセルを取得
-        var cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
         //        cell.accessoryType = UITableViewCellAccessoryType.None
         cell.backgroundColor = UIColor.hexStr("34495e", alpha: 0.7)
     }
@@ -240,7 +250,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         // 再利用するCellを取得する.
-        let cell = tableView.dequeueReusableCellWithIdentifier("MyCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("MyCell", forIndexPath: indexPath) 
         cellHeight = cell.bounds.height
         // Cellに値を設定する.
         cell.textLabel!.text = "\(myItems[indexPath.row])"
@@ -259,12 +269,12 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.accessoryView = audienceButton
         
         // 選択された時の背景色
-        var cellSelectedBgView = UIView()
+        let cellSelectedBgView = UIView()
         cellSelectedBgView.backgroundColor = UIColor.hexStr("3499e9e", alpha: 0.7)
         cell.selectedBackgroundView = cellSelectedBgView
         
         let ud = NSUserDefaults.standardUserDefaults()
-        var ip = ud.integerForKey("INDEX_PATH")
+        let ip = ud.integerForKey("INDEX_PATH")
         if(indexPath.row == ip){
             cell.backgroundColor = UIColor.hexStr("3499e9e", alpha: 1.0)
         }
@@ -287,7 +297,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func musicAudition(sender: UIButton){
         let ud = NSUserDefaults.standardUserDefaults()
-        var temp = ud.stringForKey("MUSIC_NAME")
+        let temp = ud.stringForKey("MUSIC_NAME")
         musicSave(sender.tag)
         /**今の所アラーム中にやってはいけない設定*/
         /**マナー中ならならないようにしたい*/
@@ -313,7 +323,7 @@ class CellViewController: UIViewController, UITableViewDelegate, UITableViewData
     //        musicSave(cellNum)
     //    }
     func musicSave(num:Int){
-        var bgName = selectBGM(num)
+        let bgName = selectBGM(num)
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setObject(bgName, forKey: "MUSIC_NAME")
         ud.synchronize()

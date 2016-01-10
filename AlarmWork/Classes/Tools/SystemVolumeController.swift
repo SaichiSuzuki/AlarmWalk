@@ -15,8 +15,8 @@ class SystemVolumeController {
     //システム音変更
     func systemVolumeChange(setVolume:Float){
         var session: AVAudioSession = AVAudioSession.sharedInstance()
-        var aSession = AVAudioSession()
-        var volume = aSession.outputVolume
+        let aSession = AVAudioSession()
+        let volume = aSession.outputVolume
         if(volume < setVolume){ //v以下なら強制vに
             let volumeView = MPVolumeView()
             for view in volumeView.subviews {

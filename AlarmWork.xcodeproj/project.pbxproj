@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1503344A1BEC3A5100C67976 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 150334491BEC3A5100C67976 /* silence.mp3 */; };
 		153518CB1B7DB9D30091CE43 /* howto1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 153518CA1B7DB9D30091CE43 /* howto1_2.png */; };
+		1552271C1C423F880023DC87 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1552271B1C423F880023DC87 /* Reach.swift */; };
 		155A3B5F1B75F94B00B39875 /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B5D1B75F94B00B39875 /* AdmobBanner.swift */; };
 		155A3B601B75F94B00B39875 /* AdmobInterstitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B5E1B75F94B00B39875 /* AdmobInterstitial.swift */; };
 		155A3B661B75F99200B39875 /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B641B75F99200B39875 /* HexColor.swift */; };
@@ -22,13 +24,12 @@
 		157BF6371B82EB3000E7E3C5 /* SORPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157BF6361B82EB3000E7E3C5 /* SORPurchaseManager.swift */; };
 		157BF6391B82EB4700E7E3C5 /* SORProductManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157BF6381B82EB4700E7E3C5 /* SORProductManager.swift */; };
 		157BF63B1B82EBDC00E7E3C5 /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157BF63A1B82EBDC00E7E3C5 /* PurchaseController.swift */; };
-		157C27D71B85773500419A40 /* IJReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157C27D61B85773500419A40 /* IJReachability.swift */; };
 		157CFE291B7D9D5E00D749C7 /* musicLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 157CFE281B7D9D5E00D749C7 /* musicLibrary.png */; };
 		157F04C21B7DD5820009A6CB /* Electron.caf in Resources */ = {isa = PBXBuildFile; fileRef = 157F04BF1B7DD5780009A6CB /* Electron.caf */; };
 		157F04C41B7DD5820009A6CB /* Yukai.caf in Resources */ = {isa = PBXBuildFile; fileRef = 157F04C11B7DD5780009A6CB /* Yukai.caf */; };
 		157F04C71B7DD6BB0009A6CB /* Labo.caf in Resources */ = {isa = PBXBuildFile; fileRef = 157F04C61B7DD6AE0009A6CB /* Labo.caf */; };
 		157F04CB1B7DF9FE0009A6CB /* RandMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157F04CA1B7DF9FE0009A6CB /* RandMusic.swift */; };
-		15F2C3341B5A10C2005DD3CB /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15F2C3331B5A10C2005DD3CB /* GoogleMobileAds.framework */; };
+		1598CDBB1B858722007A78E5 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1598CDBA1B858722007A78E5 /* GoogleMobileAds.framework */; };
 		9A148C8A1ACE355A001BEC29 /* AlarmWalkSplash.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A148C781ACE355A001BEC29 /* AlarmWalkSplash.png */; };
 		9A148C8B1ACE355A001BEC29 /* Icon-29.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A148C791ACE355A001BEC29 /* Icon-29.png */; };
 		9A148C8C1ACE355A001BEC29 /* Icon-29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A148C7A1ACE355A001BEC29 /* Icon-29@2x.png */; };
@@ -118,7 +119,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		150334491BEC3A5100C67976 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		153518CA1B7DB9D30091CE43 /* howto1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = howto1_2.png; sourceTree = "<group>"; };
+		1552271B1C423F880023DC87 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reach.swift; path = Tools/Reach.swift; sourceTree = "<group>"; };
 		155A3B5D1B75F94B00B39875 /* AdmobBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdmobBanner.swift; path = Ads/AdmobBanner.swift; sourceTree = "<group>"; };
 		155A3B5E1B75F94B00B39875 /* AdmobInterstitial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdmobInterstitial.swift; path = Ads/AdmobInterstitial.swift; sourceTree = "<group>"; };
 		155A3B641B75F99200B39875 /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexColor.swift; path = Tools/HexColor.swift; sourceTree = "<group>"; };
@@ -133,14 +136,13 @@
 		157BF6361B82EB3000E7E3C5 /* SORPurchaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SORPurchaseManager.swift; sourceTree = "<group>"; };
 		157BF6381B82EB4700E7E3C5 /* SORProductManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SORProductManager.swift; sourceTree = "<group>"; };
 		157BF63A1B82EBDC00E7E3C5 /* PurchaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
-		157C27D61B85773500419A40 /* IJReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IJReachability.swift; sourceTree = "<group>"; };
 		157CFE281B7D9D5E00D749C7 /* musicLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicLibrary.png; sourceTree = "<group>"; };
 		157F04BF1B7DD5780009A6CB /* Electron.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Electron.caf; sourceTree = "<group>"; };
 		157F04C11B7DD5780009A6CB /* Yukai.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Yukai.caf; sourceTree = "<group>"; };
 		157F04C61B7DD6AE0009A6CB /* Labo.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Labo.caf; sourceTree = "<group>"; };
 		157F04CA1B7DF9FE0009A6CB /* RandMusic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandMusic.swift; sourceTree = "<group>"; };
+		1598CDBA1B858722007A78E5 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		15F2C2A51B59F643005DD3CB /* AlarmWork_Swift_Bridging_Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlarmWork_Swift_Bridging_Header.h; sourceTree = "<group>"; };
-		15F2C3331B5A10C2005DD3CB /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = ../../../ads/GoogleMobileAds.framework; sourceTree = "<group>"; };
 		9A148C781ACE355A001BEC29 /* AlarmWalkSplash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AlarmWalkSplash.png; sourceTree = "<group>"; };
 		9A148C791ACE355A001BEC29 /* Icon-29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29.png"; sourceTree = "<group>"; };
 		9A148C7A1ACE355A001BEC29 /* Icon-29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29@2x.png"; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1598CDBB1B858722007A78E5 /* GoogleMobileAds.framework in Frameworks */,
 				9A361E901AA2DDCF003240CB /* ImageIO.framework in Frameworks */,
 				9A361E8E1AA2DDC7003240CB /* Security.framework in Frameworks */,
 				9A361E801AA2B8F2003240CB /* SystemConfiguration.framework in Frameworks */,
@@ -231,7 +234,6 @@
 				9A5C697D1A6B1C5D00B84E94 /* MediaPlayer.framework in Frameworks */,
 				9A361E921AA2EC95003240CB /* libAdapterNend.a in Frameworks */,
 				9A6B728A1A61267C00EE1F2F /* CoreLocation.framework in Frameworks */,
-				15F2C3341B5A10C2005DD3CB /* GoogleMobileAds.framework in Frameworks */,
 				9A6B72851A61165300EE1F2F /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,7 +260,7 @@
 		155A3B631B75F98500B39875 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				157C27D61B85773500419A40 /* IJReachability.swift */,
+				1552271B1C423F880023DC87 /* Reach.swift */,
 				155A3B691B75FA9B00B39875 /* FirstClass.swift */,
 				155A3B641B75F99200B39875 /* HexColor.swift */,
 				157F04CA1B7DF9FE0009A6CB /* RandMusic.swift */,
@@ -291,7 +293,7 @@
 		9A11B2311AB2A93800AB9F90 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				15F2C3331B5A10C2005DD3CB /* GoogleMobileAds.framework */,
+				1598CDBA1B858722007A78E5 /* GoogleMobileAds.framework */,
 				9A361E8F1AA2DDCF003240CB /* ImageIO.framework */,
 				9A361E8D1AA2DDC6003240CB /* Security.framework */,
 				9A361E7F1AA2B8F2003240CB /* SystemConfiguration.framework */,
@@ -435,6 +437,7 @@
 		9A2CEE151ABFEB7A0078A7AB /* BG */ = {
 			isa = PBXGroup;
 			children = (
+				150334491BEC3A5100C67976 /* silence.mp3 */,
 				157F04C61B7DD6AE0009A6CB /* Labo.caf */,
 				157F04BF1B7DD5780009A6CB /* Electron.caf */,
 				157F04C11B7DD5780009A6CB /* Yukai.caf */,
@@ -539,6 +542,8 @@
 		9A16F0001A60D3E100C12524 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0720;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = SaichiSuzuki;
 				TargetAttributes = {
@@ -620,6 +625,7 @@
 				9A148C971ACE355A001BEC29 /* Icon-76.png in Resources */,
 				9A2CEE2D1ABFEB7A0078A7AB /* pocket2.png in Resources */,
 				9A148C991ACE355A001BEC29 /* iTunesArtwork.png in Resources */,
+				1503344A1BEC3A5100C67976 /* silence.mp3 in Resources */,
 				9A2CEE2B1ABFEB7A0078A7AB /* pocket1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -656,6 +662,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A2CEDEE1ABFCF370078A7AB /* MusicController.swift in Sources */,
+				1552271C1C423F880023DC87 /* Reach.swift in Sources */,
 				155A3C5B1B79D1C600B39875 /* MyScrollView.swift in Sources */,
 				157BF6391B82EB4700E7E3C5 /* SORProductManager.swift in Sources */,
 				155A3B6D1B75FA9B00B39875 /* UiPageController.swift in Sources */,
@@ -664,7 +671,6 @@
 				155A3B671B75F99200B39875 /* SystemVolumeController.swift in Sources */,
 				155A3B6C1B75FA9B00B39875 /* FirstClass.swift in Sources */,
 				157BF6371B82EB3000E7E3C5 /* SORPurchaseManager.swift in Sources */,
-				157C27D71B85773500419A40 /* IJReachability.swift in Sources */,
 				157BF63B1B82EBDC00E7E3C5 /* PurchaseController.swift in Sources */,
 				155A3B601B75F94B00B39875 /* AdmobInterstitial.swift in Sources */,
 				155A3B5F1B75F94B00B39875 /* AdmobBanner.swift in Sources */,
@@ -801,13 +807,15 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/zebra/Documents/workspace/ads,
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = AlarmWork/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -831,13 +839,15 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/zebra/Documents/workspace/ads,
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = AlarmWork/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -52,7 +52,7 @@ class NotificationManager :UIResponder{
 //                println("これは抜ける!")
                 break
             }
-            var secondPost = Double(timeDifference)
+            let secondPost = Double(timeDifference)
 //            print("仕込み:\(secondPost+(Double(cnt*postInterval)))")
             let myNotification: UILocalNotification = UILocalNotification()
             myNotification.alertBody = lm.getString(14)

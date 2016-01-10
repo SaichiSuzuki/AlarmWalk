@@ -36,11 +36,12 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     //背景画像
     var backgroundImageView: UIImageView!
     // 画像を設定する.
-    let bgInputImage = CIImage(image: UIImage(named: "scrollBackground.png"))
+    let bgInputImage = CIImage(image: UIImage(named: "scrollBackground.png")!)
     
     var jButton: UIButton!
     var eButton: UIButton!
     var titleLabel: UILabel!
+    var titleBlur: UIVisualEffectView!
     
     //バナー広告クラス宣言
     var ab: AdmobBanner!
@@ -76,6 +77,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     }
     
     func titleHidden(){
+        titleBlur.removeFromSuperview()
         titleLabel.removeFromSuperview()
         jButton.removeFromSuperview()
         eButton.removeFromSuperview()
@@ -91,7 +93,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         removeFromParentViewController() //とりあえずなんか解放できるかも
         
         self.ab = AdmobBanner(view: self) //バナーインスタンス生成
-
+        
         winSize = self.view.bounds //画面サイズ取得
         
         
@@ -117,9 +119,15 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         
         // PageControlを作成する.
         pageControl = UIPageControl(frame: CGRectMake(0, self.view.frame.maxY - 100, winSize.width, 50))
-        pageControl.backgroundColor = UIColor(red: 0.1, green: 0.2, blue: 0.3, alpha: 1.0)
+        //        pageControl.backgroundColor = UIColor(red: 0.1, green: 0.2, blue: 0.3, alpha: 0.7)
+        pageControl.backgroundColor = UIColor(red: 0.025, green: 0.05, blue: 0.15, alpha: 0.9)
         // PageControlするページ数を設定する.
         pageControl.numberOfPages = pageSize
+        // PageControlにブラーかける
+        let effect = UIBlurEffect(style: UIBlurEffectStyle.Light);
+        let effectView = UIVisualEffectView(effect: effect);
+        effectView.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 50)
+        pageControl.addSubview(effectView);
         
         // 現在ページを設定する.
         pageControl.currentPage = 0
@@ -129,7 +137,6 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         if(myUserDefault.boolForKey("RegularUser_Ads")){
             ab.adbannerOpen() //バナー広告表示
         }
-        self.myUserDafault.setBool(true, forKey: "RegularUser_Ads")
         self.myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
         self.myUserDafault.synchronize()
     }
@@ -180,9 +187,15 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             //            barLabel.layer.opacity = 0.8
             //            self.view.addSubview(barLabel)
             
+            // Blur作成
+            var blur : UIVisualEffectView!
+            blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+            blur.frame = CGRect(x: CGFloat(i) * winSize.width, y: 50, width: winSize.width, height: 50)
+            self.view.addSubview(blur)
+            
             // ページごとに異なるタイトルを生成する.
             let myLabel:UILabel = UILabel(frame: CGRectMake(CGFloat(i) * winSize.width, 50, winSize.width, 50))
-            myLabel.backgroundColor = UIColor.blackColor()
+            myLabel.backgroundColor = UIColor.clearColor()
             myLabel.textColor = UIColor.whiteColor()
             myLabel.textAlignment = NSTextAlignment.Center
             myLabel.layer.masksToBounds = true
@@ -194,7 +207,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             
             //ページの補足説明
             let soundLabel:UILabel = UILabel(frame: CGRectMake(CGFloat(i) * winSize.width, winSize.height - 130, winSize.width, 30))
-            soundLabel.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.8)
+            soundLabel.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.1)
             soundLabel.textColor = UIColor.blackColor()
             soundLabel.textAlignment = NSTextAlignment.Center
             soundLabel.numberOfLines = 0;
@@ -202,41 +215,58 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             soundLabel.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
             soundLabel.font = UIFont.systemFontOfSize(12)
             soundLabel.hidden = false
-            soundLabel.layer.opacity = 0.8
+            let ud:NSUserDefaults = NSUserDefaults()
+            if(ud.integerForKey("LANGUAGE") == 1){
+                // soundLabelにブラーかける
+                let effect = UIBlurEffect(style: UIBlurEffectStyle.Light);
+                let effectView = UIVisualEffectView(effect: effect);
+                effectView.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 30)
+                soundLabel.addSubview(effectView);
+            }else{
+                soundLabel.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.8)
+            }
+            
+            //            let test:UIView = UIView(frame: CGRectMake(0, 0, 100, 100))
+            //            test.backgroundColor = UIColor.blueColor()
+            //            soundLabel.addSubview(test)
             //メイン画像
-            var iphoneView:UIImageView = UIImageView(image:howtoImage1_1)
+            let iphoneView:UIImageView = UIImageView(image:howtoImage1_1)
             iphoneView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 190, 337)
             //サブ画像
-            var iphoneSubView:UIImageView = UIImageView(image:howtoImage1_2)
+            let iphoneSubView:UIImageView = UIImageView(image:howtoImage1_2)
             iphoneSubView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 199, 305)
             iphoneSubView.hidden = true
             
             switch i{
-            case 0: myLabel.text = lm.getString(0)
-            iphoneView.layer.position = CGPoint(x: winSize.width/2 - 65, y: winSize.height/2 + 25)
-            iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 145, 253)
-            iphoneSubView.layer.position = CGPoint(x: winSize.width/2 + 85, y: winSize.height/2 + 65)
-            iphoneSubView.hidden = false
+            case 0:
+                myLabel.text = lm.getString(0)
+                iphoneView.layer.position = CGPoint(x: winSize.width/2 - 65, y: winSize.height/2 + 25)
+                iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 145, 253)
+                iphoneSubView.layer.position = CGPoint(x: winSize.width/2 + 85, y: winSize.height/2 + 65)
+                iphoneSubView.hidden = false
                 break
-            case 1: myLabel.text = lm.getString(1)
-            iphoneView.image = UIImage(named: "pocket1.png")
-            iphoneSubView.image = UIImage(named: "pocket2.png")
-            iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 150, winSize.height/2 - 90, 150, 250)
-            soundLabel.text = lm.getString(5)
-            iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 + 5, winSize.height/2 - 90, 100, 250)
-            iphoneSubView.hidden = false
+            case 1:
+                myLabel.text = lm.getString(1)
+                iphoneView.image = UIImage(named: "pocket1.png")
+                iphoneSubView.image = UIImage(named: "pocket2.png")
+                iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 150, winSize.height/2 - 90, 150, 250)
+                soundLabel.text = lm.getString(5)
+                iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 + 5, winSize.height/2 - 90, 100, 250)
+                iphoneSubView.hidden = false
                 break
-            case 2: myLabel.text = lm.getString(2)
-            //            iphoneView.image = UIImage(named: "footPaint.png")
-            //            iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, winSize.height/2 - 50, 75, 75)
-            iphoneView.hidden = true
-            soundLabel.text = lm.getString(6)
+            case 2:
+                myLabel.text = lm.getString(2)
+                //            iphoneView.image = UIImage(named: "footPaint.png")
+                //            iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, winSize.height/2 - 50, 75, 75)
+                iphoneView.hidden = true
+                soundLabel.text = lm.getString(6)
                 break
-            case 3: myLabel.text = lm.getString(3)
-            iphoneView.hidden = true
-            soundLabel.hidden = true
+            case 3:
+                myLabel.text = lm.getString(3)
+                iphoneView.hidden = true
+                soundLabel.hidden = true
                 break
                 //            case 4: myLabel.text = page5TopText
                 //            //            iphoneView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2, winSize.height/2, 300, 132)
@@ -251,6 +281,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             iphoneSubView.layer.zPosition = -1
             scrollView.addSubview(iphoneView)
             scrollView.addSubview(iphoneSubView)
+            scrollView.addSubview(blur)
             scrollView.addSubview(myLabel)
             scrollView.addSubview(soundLabel)
         }
@@ -265,18 +296,27 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         
         //0ページ目に設置
         let myLabel:UILabel = UILabel(frame: CGRectMake(-winSize.width, 50, winSize.width, 50))
-        myLabel.backgroundColor = UIColor.blackColor()
+        myLabel.backgroundColor = UIColor.clearColor()
         myLabel.layer.opacity = 0.8
         let soundLabel:UILabel = UILabel(frame: CGRectMake(-winSize.width, winSize.height - 130, winSize.width, 30))
-        soundLabel.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.8)
-        soundLabel.layer.opacity = 0.8
+        soundLabel.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.1)
+        // ゼブラ広告上にブラーかける
+        var blur : UIVisualEffectView!
+        blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+        blur.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 50)
+        myLabel.addSubview(blur)
+        // soundLabelにブラーかける
+        let effect = UIBlurEffect(style: UIBlurEffectStyle.Light);
+        let effectView = UIVisualEffectView(effect: effect);
+        effectView.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 30)
+        soundLabel.addSubview(effectView);
         //隠し広告
-        let zebraAdsImage = CIImage(image: UIImage(named: "zebraAds.png"))
+        let zebraAdsImage = CIImage(image: UIImage(named: "zebraAds.png")!)
         let zebraAdsButton = UIButton(frame: CGRectMake(0, 0, 320 * 0.8, 180 * 0.8))
         zebraAdsButton.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         //        zebraAdsButton.frame = CGRectMake(-winSize.width, winSize.height - 130, winSize.width/2, winSize.width/9)
         zebraAdsButton.layer.position = CGPoint(x: -150, y:winSize.height/2)
-        zebraAdsButton.setImage(UIImage(CIImage: zebraAdsImage), forState: .Normal)
+        zebraAdsButton.setImage(UIImage(CIImage: zebraAdsImage!), forState: .Normal)
         zebraAdsButton.addTarget(self, action: "adsButtonAction:", forControlEvents:.TouchDown)
         //        //隠れゼブラ
         //        let zebraImage:UIImage = UIImage(named:"simaumal03.png")!
@@ -341,13 +381,17 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
                 footLabel.text = "2"
                 break
             }
-            if(pageControl.currentPage==4){
-                
+            if(pageControl.currentPage==1){
+                if(!myUserDefault.boolForKey("RegularUser_Ads")){
+                    let lm = LangManager()
+                    let alert = UIAlertView()
+                    alert.title = lm.getString(18)
+                    alert.message = lm.getString(19)
+                    alert.addButtonWithTitle("OK")
+                    alert.show()
+                }
+                self.myUserDafault.setBool(true, forKey: "RegularUser_Ads")
             }
-            else if(pageControl.currentPage==2) {
-                
-            }
-            
             
         }
     }
@@ -400,9 +444,11 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         titleBtn.addTarget(self, action: "moveTitle", forControlEvents:.TouchUpInside)
         self.view.addSubview(titleBtn)
         
-        
+        titleBlur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+        titleBlur.frame = CGRect(x: 0, y: 50, width: winSize.width, height: winSize.height/6)
+        self.view.addSubview(titleBlur)
         titleLabel = UILabel(frame: CGRectMake(0, 50, winSize.width, winSize.height/6))
-        titleLabel.backgroundColor = UIColor.blackColor()
+        titleLabel.backgroundColor = UIColor.clearColor()
         titleLabel.textColor = UIColor.whiteColor()
         titleLabel.textAlignment = NSTextAlignment.Center
         titleLabel.layer.masksToBounds = true
@@ -436,7 +482,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         
         // UIImageViewを作成する.
         backgroundImageView = UIImageView(frame: CGRectMake(0, 0, winSize.width, winSize.height))
-        backgroundImageView.image = UIImage(CIImage: bgInputImage)
+        backgroundImageView.image = UIImage(CIImage: bgInputImage!)
         backgroundImageView.layer.opacity = 0.4
         backgroundImageView.layer.zPosition = -2
         view.addSubview(backgroundImageView)

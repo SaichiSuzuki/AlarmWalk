@@ -16,7 +16,7 @@ import GoogleMobileAds
 
 class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationManagerDelegate{
     class func instance() -> Self {
-        return self()
+        return self.init()
     }
     /**Admobインタースティシャルクラス宣言*/
     var ai:AdmobInterstitial!
@@ -114,8 +114,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //音楽なってるか
     var bgFlag = false
     var onOffFlag = false
-    var musicSelectFlag = false;
+    var musicSelectFlag = false
     //    var switchPushOverFlag = false
+    var alartFlag = false
     
     /*タイマー*/
     //////////
@@ -127,7 +128,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     var alarmTimer : NSTimer!
     var playBoyTimer : NSTimer!
     //マナーモード解除警告
-    var mannerCautionTimer : NSTimer!
+    //    var mannerCautionTimer : NSTimer!
     
     /*その他*/
     //ユーザーデフォルト
@@ -175,9 +176,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //ステップバー
     var lifeStepper: UIStepper!
     //音量アイコン
-    let musicStopCIImage = CIImage(image: UIImage(named: "soundIconZero.png"))
+    let musicStopCIImage = CIImage(image: UIImage(named: "soundIconZero.png")!)
     var musicStopUIImage:UIImageView!
-    let musicPlayCIImage = CIImage(image: UIImage(named: "soundIconOne.png"))
+    let musicPlayCIImage = CIImage(image: UIImage(named: "soundIconOne.png")!)
     var musicPlayUIImage:UIImageView!
     //距離アイコン
     //    let walkCIImage = CIImage(image: UIImage(named: "soundIconZero.png"))
@@ -196,7 +197,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     var bellOffImage = UIImage(named: "belloff.png")
     var bellImageView: UIImageView!
     //音楽選択ボタン
-    let musicSelectCIImage = CIImage(image: UIImage(named: "musicLibrary.png"))
+    let musicSelectCIImage = CIImage(image: UIImage(named: "musicLibrary.png")!)
     
     
     //チュートリアルボタン
@@ -207,7 +208,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     var backgroundImageView: UIImageView!
     //背景に仕様する画像
     // 画像を設定する.
-    let bgInputImage = CIImage(image: UIImage(named: "bg.png"))
+    let bgInputImage = CIImage(image: UIImage(named: "bg.png")!)
     //アラームオンオフスイッチ
     var alarmSwitch: UISwitch = UISwitch()
     //マナーモード推奨バー
@@ -219,7 +220,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     var effectView : UIVisualEffectView!
     
     //インタースティシャル広告準備
-    var interstitial: GADInterstitial = GADInterstitial()
+    var interstitial: GADInterstitial = GADInterstitial(adUnitID: "ca-app-pub-1645837363749700/5447856877")
     var interstitialData: GADInterstitial {
         get{
             return interstitial
@@ -249,7 +250,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //    }
     //オンオフスイッチ
     func onClickMySwitch(sender: UISwitch){
-
         NotificationUtil.pushDelete()
         let lm = LangManager()
         if sender.on == true {
@@ -265,11 +265,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                 }, completion: {(Bool) -> Void in
                     self.mannerModeLabel.text = lm.getString(11);
             })
-            if(self.mannerCautionTimer != nil){
-                self.mannerCautionTimer.invalidate()
-                self.mannerCautionTimer = nil
-            }
-            self.mannerCautionTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "mannerLabelReturn", userInfo: nil, repeats: true)
+            //            if(self.mannerCautionTimer != nil){
+            //                self.mannerCautionTimer.invalidate()
+            //                self.mannerCautionTimer = nil
+            //            }
+            NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "mannerLabelReturn", userInfo: nil, repeats: false)
+            AVAudioPlayerUtil.silencePlay();//再生
         } else {
             //            switchPushOverFlag = false
             onOffFlag = false
@@ -285,15 +286,16 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                     self.mannerModeLabel.text = lm.getString(11)
             })
             NotificationUtil.pushDelete()
+            AVAudioPlayerUtil.stop()
         }
         myUserDafault.setBool(onOffFlag, forKey: "ONOFF")
         myUserDafault.synchronize()
-        var isRand = myUserDafault.boolForKey("IS_RAND")
+        let isRand = myUserDafault.boolForKey("IS_RAND")
         if(isRand == true){
             let rm = RandMusic()
             myUserDafault.setObject(rm.getRandMusic(), forKey: "MUSIC_NAME")
             myUserDafault.synchronize()
-//            println("通知音変更:\(rm.getRandMusic())")
+            //            println("通知音変更:\(rm.getRandMusic())")
         }
         
         let qualityOfServiceClass = DISPATCH_QUEUE_PRIORITY_DEFAULT
@@ -327,10 +329,10 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         //        }
         //暗号生成
         for(var i=0;i<cryptographyNum;i++){
-            var rand = Int(arc4random()%36)
+            let rand = Int(arc4random()%36)
             if(rand>9){
                 //英語に変換
-                var word = englishWordsConverter(rand)
+                let word = englishWordsConverter(rand)
                 strCrypho = strCrypho + "\(word)" + "%"
                 strAnswer = strAnswer + "\(word)"
             }
@@ -348,13 +350,13 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         let cancelAction:UIAlertAction = UIAlertAction(title: "Cancel",
             style: UIAlertActionStyle.Cancel,
             handler:{
-                (action:UIAlertAction!) -> Void in
+                (action:UIAlertAction) -> Void in
         })
         let defaultAction:UIAlertAction = UIAlertAction(title: "OK",
             style: UIAlertActionStyle.Default,
             handler:{
-                (action:UIAlertAction!) -> Void in
-                let textFields:Array<UITextField>? =  alert.textFields as! Array<UITextField>?
+                (action:UIAlertAction) -> Void in
+                let textFields:Array<UITextField>? =  alert.textFields 
                 if textFields != nil {
                     for textField:UITextField in textFields! {
                         //各textにアクセス
@@ -372,7 +374,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         alert.addAction(defaultAction)
         
         //textfiledの追加 実行した分textfiledを追加される。
-        alert.addTextFieldWithConfigurationHandler({(text:UITextField!) -> Void in
+        alert.addTextFieldWithConfigurationHandler({(text:UITextField) -> Void in
             text.placeholder = "Never Give Up"
         })
         presentViewController(alert, animated: true, completion: nil)
@@ -398,24 +400,28 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //画面が表示される直前
     override func viewWillAppear(animated: Bool) {
         super.viewDidDisappear(animated)
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.navCon?.setNavigationBarHidden(true, animated: false)
         onOffFlag = myUserDafault.boolForKey("ONOFF")
     }
-
+    
     //画面が表示された直後
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         AVAudioPlayerUtil.stopTest();//停止
         alertComeCheck() //アラートからきたかチェック
-//        musicStop()
+        if(alartFlag){
+            alartFlag = false
+            let lm = LangManager()
+            self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         //課金リセット
-//        let ud = NSUserDefaults.standardUserDefaults()
-//        ud.setBool(false, forKey: "PURCHASE_MUSIC")
-//        ud.synchronize()
+        //        let ud = NSUserDefaults.standardUserDefaults()
+        //        ud.setBool(false, forKey: "PURCHASE_MUSIC")
+        //        ud.synchronize()
         //        removeFromParentViewController() //とりあえずなんか解放できるかも navigationbar使えなくなる
         self.ai = AdmobInterstitial(view: self) //Admobインタースティシャルインスタンスを生成
         //        println(myUserDafault.integerForKey("TUTORIALLIFE"))
@@ -425,10 +431,10 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         //        NotificationUtil.pushDelete()
         //        myUserDafault.synchronize()
         ///////////////////////////////
+        pushAuthorization() //プッシュ通知許可
         firstContactCheck()
         winSize = self.view.bounds //画面サイズ取得
         self.view.backgroundColor = UIColor.lightGrayColor() //背景色
-        pushAuthorization() //プッシュ通知許可
         bgFlag = myUserDafault.boolForKey("bgm")
         objectMake() //オブジェクト生成関数を実行してもよければ実行
         objectMove() //オブジェクト移動
@@ -456,9 +462,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
         else{
             noMusicInit()
+            if(onOffFlag){
+                AVAudioPlayerUtil.silencePlay();//再生
+            }
         }
         //現在時刻保存
-        comps = calendar.components(NSCalendarUnit.YearCalendarUnit|NSCalendarUnit.MonthCalendarUnit|NSCalendarUnit.DayCalendarUnit|NSCalendarUnit.HourCalendarUnit|NSCalendarUnit.MinuteCalendarUnit|NSCalendarUnit.SecondCalendarUnit,
+        comps = calendar.components([NSCalendarUnit.NSYearCalendarUnit, NSCalendarUnit.NSMonthCalendarUnit, NSCalendarUnit.NSDayCalendarUnit, NSCalendarUnit.NSHourCalendarUnit, NSCalendarUnit.NSMinuteCalendarUnit, NSCalendarUnit.NSSecondCalendarUnit],
             fromDate: now)
         myUserDafault.setInteger(comps.hour, forKey: "ONCEHOUR")
         myUserDafault.setInteger(comps.minute, forKey: "ONCEMINUTE")
@@ -474,9 +483,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         //        scrollView.layer.position = CGPoint(x: 0,y: winSize.height/2)
         
         //広告表示
-        var n = Int(arc4random()%20)
+        let n = Int(arc4random()%15)
         if(n == 0){
-            ai.showAds(5)
+            ai.showAds(3)
         }
         
     }
@@ -498,16 +507,16 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     func alarmUpdate(){
         //1秒毎に現在時刻取得
         getNowTime()
-        var nowSecond = secondConverter(comps.hour, minute: comps.minute, second: comps.second)
-        var setingTime = myUserDafault.integerForKey("PLANSECOND")
+        let nowSecond = secondConverter(comps.hour, minute: comps.minute, second: comps.second)
+        let setingTime = myUserDafault.integerForKey("PLANSECOND")
         //本来なるはずの時刻
-        var timerPlanTime = myUserDafault.integerForKey("pastTime") + myUserDafault.integerForKey("differenceTime")
+        let timerPlanTime = myUserDafault.integerForKey("pastTime") + myUserDafault.integerForKey("differenceTime")
         if(timerPlanTime>=86400){
             timerPlanTime - 86400
         }
         //アラームセットして画面つけていてセットタイムになった場合
         if((nowSecond>=timerPlanTime || nowSecond==setingTime) && bgFlag==false && onOffFlag==true){
-//            println("アラーム開始")
+            //            println("アラーム開始")
             musicStart()
         }
         if(bgFlag == true && comps.second == 0){
@@ -517,18 +526,18 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     }
     //アラートから来たかチェック
     internal func alertComeCheck(){
-//        println("チェック")
+        //        println("チェック")
         now = NSDate()
         formatter.dateFormat = "HH:mm:ss"
         formatter.timeStyle = .MediumStyle
         //現在時刻を過去時刻に保存
         calendar = NSCalendar.currentCalendar()
-        comps = calendar.components(NSCalendarUnit.YearCalendarUnit|NSCalendarUnit.MonthCalendarUnit|NSCalendarUnit.DayCalendarUnit|NSCalendarUnit.HourCalendarUnit|NSCalendarUnit.MinuteCalendarUnit|NSCalendarUnit.SecondCalendarUnit,
+        comps = calendar.components([NSCalendarUnit.NSYearCalendarUnit, NSCalendarUnit.NSMonthCalendarUnit, NSCalendarUnit.NSDayCalendarUnit, NSCalendarUnit.NSHourCalendarUnit, NSCalendarUnit.NSMinuteCalendarUnit, NSCalendarUnit.NSSecondCalendarUnit],
             fromDate: now)
-        var nowSecond = secondConverter(comps.hour, minute: comps.minute, second: comps.second)
-        var pastTime = myUserDafault.integerForKey("pastTime") //スイッチオンした時間
+        let nowSecond = secondConverter(comps.hour, minute: comps.minute, second: comps.second)
+        let pastTime = myUserDafault.integerForKey("pastTime") //スイッチオンした時間
         var differenceTime = myUserDafault.integerForKey("differenceTime")
-        var planTime = myUserDafault.integerForKey("PLANSECOND") //設定時間
+        let planTime = myUserDafault.integerForKey("PLANSECOND") //設定時間
         //        var timerPlanTime = pastTime + differenceTime //設定時間
         //        if(timerPlanTime>=86400){
         //            timerPlanTime - 86400
@@ -538,12 +547,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         onOffFlag = myUserDafault.boolForKey("ONOFF")
         //        println("ONOFFflag:\(onOffFlag)")
         if(pastTime > nowSecond){
-            var diff = pastTime - nowSecond
+            let diff = pastTime - nowSecond
             dayCount += (diff / 86400)+1
         }
         //アラートからきた場合
         if(planTime<=(nowSecond+(86400*dayCount)) && bgFlag==false && onOffFlag==true){
-//            println("アラートからきましたね")
+            //            println("アラートからきましたね")
             //            var label:UILabel = UILabel()
             //            label.frame = CGRect(x: 30.0, y: 30.0, width:200.0, height:200.0);
             //            label.text = "アラートからきましたね"
@@ -565,16 +574,20 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         // 更新周期を設定.
         myMotionManager.accelerometerUpdateInterval = 0.3
         // 加速度の取得を開始.
-        myMotionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: {(accelerometerData:CMAccelerometerData!, error:NSError!) -> Void in
+        myMotionManager.startAccelerometerUpdatesToQueue(NSOperationQueue()) { (accelerometerData: CMAccelerometerData?, error: NSError?) -> Void in
+            guard accelerometerData != nil else {
+                print("There was an error: \(error)")
+                return
+            }
             //現在加速度取得しテキスト表示
             //            self.accelX = accelerometerData.acceleration.x
-            self.accelY = accelerometerData.acceleration.y
-            self.accelZ = accelerometerData.acceleration.z
+            self.accelY = accelerometerData!.acceleration.y
+            self.accelZ = accelerometerData!.acceleration.z
             //実験ならログを残す
             if(self.logRemain == false && self.experimentFlag == true){
-                print("\(accelerometerData.acceleration.x):")
-                print("\(accelerometerData.acceleration.y):")
-                print("\(accelerometerData.acceleration.z)X")
+                print("\(accelerometerData!.acceleration.x):", terminator: "")
+                print("\(accelerometerData!.acceleration.y):", terminator: "")
+                print("\(accelerometerData!.acceleration.z)X", terminator: "")
             }
             /*新機能Accel研究*/
             //accelY研究
@@ -651,11 +664,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                             self.vibTimer.invalidate() //バイブ終了
                         }
                         AVAudioPlayerUtil.playFinish();//終了音再生
+                        self.ai.showAds()
+                        self.alartFlag = true
                         //                        var stopMessage = "おきましたか？"
                         //                        if(self.myUserDafault.integerForKey("LANGUAGE") == 1){
                         //                            stopMessage = "Let's happy life"
                         //                        }
-                        self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
                         self.myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
                         self.myUserDafault.synchronize()
                     }
@@ -679,11 +693,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                 }
             }
             /*-------------*/
-            
-            
-        })
-        
-        
+        }
     }
     //一歩目限定イベント
     func ippome(){
@@ -694,9 +704,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     }
     
     ////////////////////////////////////////////////
-    
-    ////~~~~ジャイロセンサー~~~~///////////////////////////////
-    
+    ////~~~~ジャイロセンサー~~~~///////////////////////
     ////////////////////////////////////////////////
     
     func gyroInit(){
@@ -704,17 +712,16 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             myMotionManager.deviceMotionUpdateInterval = 0.3;
             myMotionManager.startDeviceMotionUpdates()
             myMotionManager.gyroUpdateInterval = 0.2
-            myMotionManager.startGyroUpdatesToQueue(NSOperationQueue.currentQueue()) {
-                [weak self] (gyroData: CMGyroData!, error: NSError!) in
-                
-                self?.outputRotationData(gyroData.rotationRate)
-                if error != nil {
-                    println("\(error)")
+            myMotionManager.startGyroUpdatesToQueue(NSOperationQueue()) { (gyroData: CMGyroData?, error: NSError?) -> Void in
+                guard gyroData != nil else {
+                    print("There was an error: \(error)")
+                    return
                 }
+                self.outputRotationData(gyroData!.rotationRate)
             }
         } else {
             // alert message
-            var alert = UIAlertController(title: "No gyro", message: "Get a Gyro", preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "No gyro", message: "Get a Gyro", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
@@ -767,7 +774,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             self.myJyroYCounter = self.elbowroomValue
         }
         //jyroZ研究
-        var shift = 1.0
+        let shift = 1.0
         if(self.jyroZf3 == true && rotation.z<(rotation.x - shift) && rotation.z<(rotation.y - shift)){
             self.myJyroZCounter = self.elbowroomValue
         }
@@ -869,7 +876,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
         else{
             planTime = myDateFormatter.dateFromString(mySelectedDate as String)!
-            var comp = calendar.components(NSCalendarUnit.YearCalendarUnit|NSCalendarUnit.MonthCalendarUnit|NSCalendarUnit.DayCalendarUnit|NSCalendarUnit.HourCalendarUnit|NSCalendarUnit.MinuteCalendarUnit|NSCalendarUnit.SecondCalendarUnit,
+            let comp = calendar.components([NSCalendarUnit.NSYearCalendarUnit, NSCalendarUnit.NSMonthCalendarUnit, NSCalendarUnit.NSDayCalendarUnit, NSCalendarUnit.NSHourCalendarUnit, NSCalendarUnit.NSMinuteCalendarUnit, NSCalendarUnit.NSSecondCalendarUnit],
                 fromDate: planTime)
             setTime(comp.hour, m: comp.minute) //時間ラベル更新
         }
@@ -879,10 +886,10 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         planTime = myDateFormatter.dateFromString(mySelectedDate as String)!
         
         getNowTime()
-        var nowSecond = secondConverter(comps.hour, minute: comps.minute, second: comps.second)
-//        println("nowは \(comps.hour):\(comps.minute):\(comps.second)")
-//        println("nowを秒にすると\(nowSecond)");
-        var planComps = calendar.components(NSCalendarUnit.YearCalendarUnit|NSCalendarUnit.MonthCalendarUnit|NSCalendarUnit.DayCalendarUnit|NSCalendarUnit.HourCalendarUnit|NSCalendarUnit.MinuteCalendarUnit|NSCalendarUnit.SecondCalendarUnit,
+        let nowSecond = secondConverter(comps.hour, minute: comps.minute, second: comps.second)
+        //        println("nowは \(comps.hour):\(comps.minute):\(comps.second)")
+        //        println("nowを秒にすると\(nowSecond)");
+        let planComps = calendar.components([NSCalendarUnit.NSYearCalendarUnit, NSCalendarUnit.NSMonthCalendarUnit, NSCalendarUnit.NSDayCalendarUnit, NSCalendarUnit.NSHourCalendarUnit, NSCalendarUnit.NSMinuteCalendarUnit, NSCalendarUnit.NSSecondCalendarUnit],
             fromDate: planTime)
         //ピッカー使われてない場合
         if(pickerUsedFlag==false){
@@ -898,16 +905,16 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
         timeDifference = planTimeSecond - nowSecond
         if(timeDifference<0){
-            println("ここくるか？")
+            print("ここくるか？")
             timeDifference = Int(numberConversion(Double(timeDifference)))
             timeDifference = 86400 - timeDifference
         }
         //        if(timeDifference==0){
         //            timeDifference = 0
         //        }
-//        println("planは \(planComps.hour):\(planComps.minute):00")
-//        println("planを秒にすると\(planTimeSecond)");
-//        println("時差:\(timeDifference)");
+        //        println("planは \(planComps.hour):\(planComps.minute):00")
+        //        println("planを秒にすると\(planTimeSecond)");
+        //        println("時差:\(timeDifference)");
         myUserDafault.setInteger(nowSecond, forKey: "pastTime")
         myUserDafault.setInteger(timeDifference, forKey: "differenceTime")
         myUserDafault.setInteger(planTimeSecond, forKey: "PLANSECOND")
@@ -918,14 +925,13 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     }
     func pushNotification(){
         //通知仕込む
-        var notifi = NotificationManager(diff: timeDifference)
+        let notifi = NotificationManager(diff: timeDifference)
         notifi.postAlarm()
     }
     //giveupアラート仕込み処理
     func giveUpAlartCreate(){
         while(cryptographyNum > 0){
             cryptographyNum -= 0
-            
         }
     }
     
@@ -976,7 +982,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         formatter.timeStyle = .MediumStyle
         //現在時刻を過去時刻に保存
         calendar = NSCalendar.currentCalendar()
-        comps = calendar.components(NSCalendarUnit.YearCalendarUnit|NSCalendarUnit.MonthCalendarUnit|NSCalendarUnit.DayCalendarUnit|NSCalendarUnit.HourCalendarUnit|NSCalendarUnit.MinuteCalendarUnit|NSCalendarUnit.SecondCalendarUnit,
+        comps = calendar.components([NSCalendarUnit.NSYearCalendarUnit, NSCalendarUnit.NSMonthCalendarUnit, NSCalendarUnit.NSDayCalendarUnit, NSCalendarUnit.NSHourCalendarUnit, NSCalendarUnit.NSMinuteCalendarUnit, NSCalendarUnit.NSSecondCalendarUnit],
             fromDate: now)
     }
     ////////////////////////////////////////////////
@@ -993,8 +999,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         //        self.view.addSubview(bellImageView)
         
         // 設定時間ラベル作成
-        var hou = myUserDafault.integerForKey("SET_HOUR")
-        var min = myUserDafault.integerForKey("SET_MINUTE")
+        let hou = myUserDafault.integerForKey("SET_HOUR")
+        let min = myUserDafault.integerForKey("SET_MINUTE")
         setTimeLabel = UILabel(frame: CGRectMake(0,0,winSize.width,winSize.height))
         setTimeLabel.layer.position = CGPoint(x: winSize.width/2,y: winSize.height/2 + 100);
         setTimeLabel.textAlignment = NSTextAlignment.Center
@@ -1004,9 +1010,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         getNowTime()
         setTime(comps.hour, m: comps.minute) //時間ラベル更新
-//        println("現在時間セット\(comps.hour):\(comps.minute)")
+        //        println("現在時間セット\(comps.hour):\(comps.minute)")
         if(onOffFlag == true && bgFlag == false){
-//            println("予定時間セット\(hou):\(min)")
+            //            println("予定時間セット\(hou):\(min)")
             setTime(hou, m: min) //時間ラベル更新
         }
         
@@ -1017,7 +1023,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         myDatePicker.frame = CGRectMake(0, 0, winSize.width,winSize.height/2)
         myDatePicker.timeZone = NSTimeZone.localTimeZone()
         myDatePicker.backgroundColor = UIColor.grayColor()
-        myDatePicker.layer.cornerRadius = 2.0
         myDatePicker.layer.shadowOpacity = 0.5
         myDatePicker.layer.opacity = 0.6
         myDatePicker.layer.position = CGPoint(x: winSize.width/2,y: winSize.height/2 - 130); //108
@@ -1062,14 +1067,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         musicSelectBtn.layer.position = CGPoint(x: winSize.width - 20,y: winSize.height/2 + 50);
         musicSelectBtn.layer.zPosition = 2
         musicSelectBtn.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 0.3)
-        //        musicSelectBtn.setImage(UIImage(CIImage: musicSelectCIImage), forState: .Normal)
-        //        musicSelectView = UIView(frame: CGRectMake(0,0,winSize.width/2,winSize.height*3/4))
-        //        musicSelectView.layer.masksToBounds = true
-        //        musicSelectView.backgroundColor = UIColor.hexStr("34495e", alpha: 0.7)
-        //        musicSelectView.layer.zPosition = 3
-        //flameLabel.layer.cornerRadius = 5
-        //        musicSelectWindow.layer.opacity = 0.8
-        //        musicSelectView.layer.position = CGPoint(x: self.winSize.width*5/4,y: self.winSize.height*5/8)
         
         // UIImageViewを作成する.
         myImageView = UIImageView(frame: CGRectMake(0,0,20,20))
@@ -1095,7 +1092,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         
         //枠組み作成
         //枠の見た目作成する.
-        var flameLabel = UILabel(frame: CGRectMake(0,0,winSize.width,40))
+        let flameLabel = UILabel(frame: CGRectMake(0,0,winSize.width,40))
         flameLabel.layer.masksToBounds = true
         flameLabel.backgroundColor = UIColor.hexStr("34495e", alpha: 1)
         //flameLabel.layer.cornerRadius = 5
@@ -1113,10 +1110,10 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         
         //音量アイコン
         musicStopUIImage = UIImageView(frame: CGRectMake(0, 0, 35, 35))
-        musicStopUIImage.image = UIImage(CIImage: musicStopCIImage)
+        musicStopUIImage.image = UIImage(CIImage: musicStopCIImage!)
         musicStopUIImage.layer.position = CGPoint(x: 25, y: winSize.height - 20)
         musicPlayUIImage = UIImageView(frame: CGRectMake(0, 0, 35, 35))
-        musicPlayUIImage.image = UIImage(CIImage: musicPlayCIImage)
+        musicPlayUIImage.image = UIImage(CIImage: musicPlayCIImage!)
         musicPlayUIImage.layer.position = CGPoint(x: winSize.width - 25, y: winSize.height - 20)
         
         //歩きアイコン
@@ -1154,7 +1151,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         
         // UIImageViewを作成する.
         backgroundImageView = UIImageView(frame: CGRectMake(0, 0, winSize.width, winSize.height))
-        backgroundImageView.image = UIImage(CIImage: bgInputImage)
+        backgroundImageView.image = UIImage(CIImage: bgInputImage!)
         backgroundImageView.layer.opacity = 0.8
         
         //マナーモード推奨ラベル
@@ -1184,7 +1181,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         effect = UIBlurEffect(style: UIBlurEffectStyle.Light)
         
         //音量スライダー生成
-        var wrapperView = MPVolumeView(frame: CGRectMake(0, 0, winSize.width-100, 50))
+        let wrapperView = MPVolumeView(frame: CGRectMake(0, 0, winSize.width-100, 50))
         wrapperView.layer.position = CGPoint(x: winSize.width/2, y:winSize.height - 5)
         //        wrapperView.addTarget(self, action: "onChangeValueStepSlider:", forControlEvents: UIControlEvents.ValueChanged)
         wrapperView.tintColor = UIColor.whiteColor()
@@ -1217,8 +1214,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         self.view.addSubview(setTimeLabel)
         self.view.addSubview(wrapperView)
         self.view.addSubview(mannerModeLabel)
-        
-        //objectMove()//オブジェクトポジション
     }
     
     func moveCellView(){
@@ -1286,7 +1281,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         let myColorFilter = CIFilter(name: "CIColorCrossPolynomial")
         
         // イメージを設定する.
-        myColorFilter.setValue(bgInputImage, forKey: kCIInputImageKey)
+        myColorFilter!.setValue(bgInputImage, forKey: kCIInputImageKey)
         
         // RGBの変換値を作成する.
         var r: [CGFloat]!
@@ -1309,12 +1304,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
         
         // 値の調整をする.
-        myColorFilter.setValue(CIVector(values: r, count: 10), forKey: "inputRedCoefficients")
-        myColorFilter.setValue(CIVector(values: g, count: 10), forKey: "inputGreenCoefficients")
-        myColorFilter.setValue(CIVector(values: b, count: 10), forKey: "inputBlueCoefficients")
+        myColorFilter!.setValue(CIVector(values: r, count: 10), forKey: "inputRedCoefficients")
+        myColorFilter!.setValue(CIVector(values: g, count: 10), forKey: "inputGreenCoefficients")
+        myColorFilter!.setValue(CIVector(values: b, count: 10), forKey: "inputBlueCoefficients")
         
         // フィルターで処理した画像をアウトプットする.
-        let myOutputImage : CIImage = myColorFilter.outputImage
+        let myOutputImage : CIImage = myColorFilter!.outputImage!
         
         // 再びUIView処理済み画像を設定する.
         backgroundImageView.image = UIImage(CIImage: myOutputImage)
@@ -1348,14 +1343,83 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
     }
     func pushAuthorization(){
-        // 通知の許可をもらう.
-        UIApplication.sharedApplication().registerUserNotificationSettings(
-            UIUserNotificationSettings(
-                forTypes:UIUserNotificationType.Sound | UIUserNotificationType.Alert,
-                categories: nil)
-        )
+        // 許可がされてなければ
+        if(!isEnabled()){
+            let ud = NSUserDefaults.standardUserDefaults()
+            if(ud.boolForKey("PLAY_BOY")){
+                settingTransitionAlert()
+            }else{
+                pushTransitionAlert()
+            }
+        }
     }
-    
+    // 通知許可しているか
+    func isEnabled() -> Bool {
+        return (UIApplication.sharedApplication().currentUserNotificationSettings()!.types.intersect(UIUserNotificationType.Alert)) != []
+    }
+    // 設定飛ばせるアラート
+    func settingTransitionAlert() {
+        let lm = LangManager()
+        // Style Alert
+        let alert: UIAlertController = UIAlertController(title: lm.getString(20),
+            message: lm.getString(21),
+            preferredStyle: UIAlertControllerStyle.Alert
+        )
+        // Cancel 一つだけしか指定できない
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel",
+            style: UIAlertActionStyle.Cancel,
+            handler:{
+                (action:UIAlertAction) -> Void in
+        })
+        // Default 複数指定可
+        let defaultAction: UIAlertAction = UIAlertAction(title: "OK",
+            style: UIAlertActionStyle.Default,
+            handler:{
+                (action:UIAlertAction) -> Void in
+                self.openAppSettingPage()
+        })
+        // AddAction 記述順に反映される
+        alert.addAction(cancelAction)
+        alert.addAction(defaultAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    // 通知許可出すアラート
+    func pushTransitionAlert() {
+        let lm = LangManager()
+        // Style Alert
+        let alert: UIAlertController = UIAlertController(title:lm.getString(20),
+            message: lm.getString(21),
+            preferredStyle: UIAlertControllerStyle.Alert
+        )
+        // Default 複数指定可
+        let defaultAction: UIAlertAction = UIAlertAction(title: "OK",
+            style: UIAlertActionStyle.Default,
+            handler:{
+                (action:UIAlertAction) -> Void in
+                // 通知の許可をもらう.
+                UIApplication.sharedApplication().registerUserNotificationSettings(
+                    UIUserNotificationSettings(
+                        forTypes:[UIUserNotificationType.Sound, UIUserNotificationType.Alert],
+                        categories: nil)
+                )
+        })
+        // AddAction 記述順に反映される
+        alert.addAction(defaultAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+
+
+    // 設定画面に飛ばす(ios8以上限定)
+    func openAppSettingPage() -> Void {
+        let application = UIApplication.sharedApplication()
+        let osVersion = UIDevice.currentDevice().systemVersion
+        if osVersion < "8.0" {
+            // not supported
+        }else{
+            let url = NSURL(string:UIApplicationOpenSettingsURLString)!
+            UIApplication.sharedApplication().openURL(url)
+        }
+    }
     
     ////////////////////////////////////////////////
     ////~~~~TURU~~~~///////////////////////////////
@@ -1372,8 +1436,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         return (hour*3600) + (minute*60) + second
     }
     func timeConverter(time: Int) -> (Int,Int,Int){
-        var second = time%60;
-        var minute = (time/60)%60;
+        let second = time%60;
+        let minute = (time/60)%60;
         var hour = (time/60/60);
         if hour >= 24 {
             hour -= 24
@@ -1381,7 +1445,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         return (hour, minute, second)
     }
     func timeSave(){
-        var time = timeConverter(myUserDafault.integerForKey("PLANSECOND"))
+        let time = timeConverter(myUserDafault.integerForKey("PLANSECOND"))
         myUserDafault.setInteger(time.0, forKey: "SET_HOUR")
         myUserDafault.setInteger(time.1, forKey: "SET_MINUTE")
         myUserDafault.synchronize()
@@ -1485,9 +1549,11 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         let defaultAction:UIAlertAction = UIAlertAction(title: okStr,
             style: UIAlertActionStyle.Default,
             handler:{
-                (action:UIAlertAction!) -> Void in
-                let textFields:Array<UITextField>? =  alert.textFields as! Array<UITextField>?
-                self.ai.showAds() //広告表示
+                (action:UIAlertAction) -> Void in
+                let textFields:Array<UITextField>? =  alert.textFields
+                if(okStr == "No thank you"){
+                    self.ai.showAds() //広告表示
+                }
         })
         alert.addAction(defaultAction)
         presentViewController(alert, animated: true, completion: nil)
@@ -1565,19 +1631,19 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             if let type: AnyObject = userInfos["AVAudioSessionInterruptionTypeKey"] {
                 if type is NSNumber {
                     if type.unsignedLongValue == AVAudioSessionInterruptionType.Began.rawValue{
-                        println("割り込みきた")
+                        print("割り込みきた")
                         if (bgFlag == true && AVAudioPlayerUtil.audioPlayer[0].playing) {
                             //AVAudioPlayerUtil.stop()
                         }
                     }
                     if type.unsignedLongValue == AVAudioSessionInterruptionType.Ended.rawValue{
-                        print("割り込み終わっ・")
+                        print("割り込み終わっ・", terminator: "")
                         if (bgFlag == true  && AVAudioPlayerUtil.audioPlayer[0].playing == false) {
                             // 現在再生していないなら再生
-                            print("・・・")
+                            print("・・・", terminator: "")
                             AVAudioPlayerUtil.play() //再生
                         }
-                        println("た")
+                        print("た")
                     }
                 }
             }
@@ -1597,27 +1663,36 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         //                }
         //            }
         //        }
-        for port in session.currentRoute.outputs as! [AVAudioSessionPortDescription] {
+        for port in session.currentRoute.outputs {
             //            println(port.portName)
             //            println(port.portType)
             //            println(port.UID)
             if port.portType == AVAudioSessionPortBuiltInSpeaker {
                 //内臓スピーカが選ばれている時の処理
-                println("スピーカ")
+                print("スピーカ")
             }else if port.portType == AVAudioSessionPortHeadphones {
-                //ヘッドホンが選ばれている時の処理
-                //                println("ヘッドホン")
-                session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: nil)
-                session.setActive(true, error: nil)
-                session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, error: nil)
+                do {
+                    //ヘッドホンが選ばれている時の処理
+                    //                println("ヘッドホン")
+                    try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+                } catch _ {
+                }
+                do {
+                    try session.setActive(true)
+                } catch _ {
+                }
+                do {
+                    try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+                } catch _ {
+                }
             }
-            for channel in port.channels as! [AVAudioSessionChannelDescription] {
+//            for channel in port.channels as! [AVAudioSessionChannelDescription] {
                 //左右チャンネルなどの情報が欲しいとき、以下を検討
                 //println(channel.channelName)
                 //println(channel.channelNumber)
                 //println(channel.owningPortUID)
                 //println(channel.channelName)
-            }
+//            }
         }
     }
     
@@ -1637,15 +1712,15 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     
     func mannerLabelReturn(){
         let lm = LangManager()
-        if(mannerCautionTimer != nil){
-            mannerCautionTimer.invalidate()
-            mannerCautionTimer = nil
-            UIView.animateWithDuration(1.0, animations: {() -> Void in
-                self.mannerModeLabel.center = CGPoint(x: -self.mannerModeLabel.bounds.width,y: self.winSize.height/2 + 40)
-                }, completion: {(Bool) -> Void in
-                    self.mannerModeLabel.text = lm.getString(11)
-            })
-        }
+        //        if(mannerCautionTimer != nil){
+        //            mannerCautionTimer.invalidate()
+        //            mannerCautionTimer = nil
+        UIView.animateWithDuration(1.0, animations: {() -> Void in
+            self.mannerModeLabel.center = CGPoint(x: -self.mannerModeLabel.bounds.width,y: self.winSize.height/2 + 40)
+            }, completion: {(Bool) -> Void in
+                self.mannerModeLabel.text = lm.getString(11)
+        })
+        //        }
     }
     
     //タップしたとき枠が波紋のように広がる
@@ -1656,7 +1731,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             let tmpH:CGFloat = sender.view!.frame.height
             let tmpW:CGFloat = sender.view!.frame.width
             
-            var clickActionV:UIView = UIView()
+            let clickActionV:UIView = UIView()
             clickActionV.frame = CGRectMake(tmpX, tmpY, tmpW, tmpH)
             clickActionV.layer.borderColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.5).CGColor
             clickActionV.layer.borderWidth = 2.0

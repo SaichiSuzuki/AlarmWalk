@@ -10,7 +10,7 @@ import UIKit
 
 class FirstClass{
     func playBoyCheck() -> Bool{
-        var myUserDefault:NSUserDefaults = NSUserDefaults()
+        let myUserDefault:NSUserDefaults = NSUserDefaults()
         if(myUserDefault.boolForKey("PLAY_BOY")){ //2回目以降
             return true
         }
@@ -21,11 +21,11 @@ class FirstClass{
             ////////////// 初期設定 ///////////////
             //////////////////////////////////////
             //音楽設定
-            var myUserDafault:NSUserDefaults = NSUserDefaults()
+            let myUserDafault:NSUserDefaults = NSUserDefaults()
             myUserDafault.setObject("You_wanna_fightC", forKey: "MUSIC_NAME")
             myUserDafault.synchronize()
             //言語設定
-            myUserDafault.setInteger(1, forKey: "LANGUAGE")
+            myUserDafault.setInteger(1, forKey: "LANGUAGE") //初期は日本語
             myUserDafault.synchronize()
             //歩数設定
             myUserDafault.setInteger(3, forKey: "LIFEFINAL")
