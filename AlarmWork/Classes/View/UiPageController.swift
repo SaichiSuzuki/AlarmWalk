@@ -25,13 +25,11 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     
     var walkTestTimer: NSTimer!
     
-    var myUserDafault:NSUserDefaults = NSUserDefaults()
+    var ud:NSUserDefaults = NSUserDefaults()
     
     let volumeChange = SystemVolumeController()
     
     var titleBtn = UIButton()
-    
-    var myUserDefault = NSUserDefaults()
     
     //背景画像
     var backgroundImageView: UIImageView!
@@ -53,8 +51,8 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     
     /**日本語ボタン**/
     func japaneseAction(sender: UIButton){
-        self.myUserDafault.setInteger(1, forKey: "LANGUAGE")
-        self.myUserDafault.synchronize()
+        self.ud.setInteger(1, forKey: "LANGUAGE")
+        self.ud.synchronize()
         titleHidden()
     }
     func japaneseActionOut(sender: UIButton){
@@ -65,8 +63,8 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     }
     /**英語ボタン**/
     func englishAction(sender: UIButton){
-        self.myUserDafault.setInteger(0, forKey: "LANGUAGE")
-        self.myUserDafault.synchronize()
+        self.ud.setInteger(0, forKey: "LANGUAGE")
+        self.ud.synchronize()
         titleHidden()
     }
     func englishActionOut(sender: UIButton){
@@ -134,20 +132,52 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         pageControl.userInteractionEnabled = false
         
         
-        if(myUserDefault.boolForKey("RegularUser_Ads")){
+        if(ud.boolForKey("RegularUser_Ads")){
             ab.adbannerOpen() //バナー広告表示
         }
-        self.myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
-        self.myUserDafault.synchronize()
-    }
-    func walkTestUpdate(){
-        if(myUserDafault.integerForKey("TUTORIALLIFE") == 4 || myUserDafault.integerForKey("TUTORIALLIFE") == 5){
-            myUserDafault.setInteger(2, forKey: "TUTORIALLIFE")
-            myUserDafault.synchronize()
+        self.ud.setInteger(4, forKey: "TUTORIALLIFE")
+        self.ud.synchronize()
+        if ud.integerForKey("PLAY_BOY") == 1 {
+            // プッシュ説明アラート
+            NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "pushTransitionAlert", userInfo: nil, repeats: false)
+            ud.setInteger(2, forKey: "PLAY_BOY")
+            ud.synchronize()
         }
-        if(footCount != myUserDafault.integerForKey("TUTORIALLIFE")){
+    }
+    
+    // 通知許可出すアラート
+    func pushTransitionAlert() {
+        let lm = LangManager()
+        // Style Alert
+        let alert: UIAlertController = UIAlertController(title:lm.getString(20),
+            message: lm.getString(21),
+            preferredStyle: UIAlertControllerStyle.Alert
+        )
+        // Default 複数指定可
+        let defaultAction: UIAlertAction = UIAlertAction(title: "OK",
+            style: UIAlertActionStyle.Default,
+            handler:{
+                (action:UIAlertAction) -> Void in
+                // 通知の許可をもらう.
+                UIApplication.sharedApplication().registerUserNotificationSettings(
+                    UIUserNotificationSettings(
+                        forTypes:[UIUserNotificationType.Sound, UIUserNotificationType.Alert],
+                        categories: nil)
+                )
+        })
+        // AddAction 記述順に反映される
+        alert.addAction(defaultAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+
+    func walkTestUpdate(){
+        if(ud.integerForKey("TUTORIALLIFE") == 4 || ud.integerForKey("TUTORIALLIFE") == 5){
+            ud.setInteger(2, forKey: "TUTORIALLIFE")
+            ud.synchronize()
+        }
+        if(footCount != ud.integerForKey("TUTORIALLIFE")){
             
-            footCount = myUserDafault.integerForKey("TUTORIALLIFE")
+            footCount = ud.integerForKey("TUTORIALLIFE")
             if(footCount>0){
                 //ラベル更新
                 footLabel.text = "\(footCount)"
@@ -216,11 +246,11 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
             soundLabel.font = UIFont.systemFontOfSize(12)
             soundLabel.hidden = false
             let ud:NSUserDefaults = NSUserDefaults()
+            // soundLabelにブラーかける
+            let effect = UIBlurEffect(style: UIBlurEffectStyle.Light);
+            let effectView = UIVisualEffectView(effect: effect);
+            effectView.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 30)
             if(ud.integerForKey("LANGUAGE") == 1){
-                // soundLabelにブラーかける
-                let effect = UIBlurEffect(style: UIBlurEffectStyle.Light);
-                let effectView = UIVisualEffectView(effect: effect);
-                effectView.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 30)
                 soundLabel.addSubview(effectView);
             }else{
                 soundLabel.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.8)
@@ -246,7 +276,10 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
                 iphoneSubView.frame = CGRectMake(CGFloat(i) * winSize.width + winSize.width/2 - 100, 150, 145, 253)
                 iphoneSubView.layer.position = CGPoint(x: winSize.width/2 + 85, y: winSize.height/2 + 65)
                 iphoneSubView.hidden = false
-                break
+                soundLabel.frame = CGRectMake(CGFloat(i) * winSize.width, winSize.height - 145, winSize.width, 45)
+                if(ud.integerForKey("LANGUAGE") == 1){
+                    effectView.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 45)
+                }
             case 1:
                 myLabel.text = lm.getString(1)
                 iphoneView.image = UIImage(named: "pocket1.png")
@@ -371,18 +404,29 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
                 break
             case 2:
                 footCount = 2
-                myUserDafault.setInteger(footCount, forKey: "TUTORIALLIFE")
-                myUserDafault.synchronize()
+                ud.setInteger(footCount, forKey: "TUTORIALLIFE")
+                ud.synchronize()
                 footLabel.text = "\(footCount)"
+                
+                if(!ud.boolForKey("RegularUser_Ads")){
+                    let lm = LangManager()
+                    let alert = UIAlertView()
+                    alert.title = lm.getString(18)
+                    alert.message = lm.getString(22)
+                    alert.addButtonWithTitle("OK")
+                    alert.show()
+                    self.ud.setBool(true, forKey: "RegularUser_Ads")
+                    self.ud.synchronize()
+                }
                 break
             default:
-                myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
-                myUserDafault.synchronize()
+                ud.setInteger(4, forKey: "TUTORIALLIFE")
+                ud.synchronize()
                 footLabel.text = "2"
                 break
             }
             if(pageControl.currentPage==1){
-                if(!myUserDefault.boolForKey("RegularUser_Ads")){
+                if(!ud.boolForKey("RegularUser_Ads")){
                     let lm = LangManager()
                     let alert = UIAlertView()
                     alert.title = lm.getString(18)
@@ -390,7 +434,6 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
                     alert.addButtonWithTitle("OK")
                     alert.show()
                 }
-                self.myUserDafault.setBool(true, forKey: "RegularUser_Ads")
             }
             
         }
@@ -398,8 +441,8 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     func timerManager(){
         //歩いても反応しないように
         if(pageControl.currentPage != 2){
-            self.myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
-            self.myUserDafault.synchronize()
+            self.ud.setInteger(4, forKey: "TUTORIALLIFE")
+            self.ud.synchronize()
             if(walkTestTimer != nil && walkTestTimer.valid == true){
                 walkTestTimer.invalidate()
                 walkTestTimer = nil
@@ -407,24 +450,24 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         }
             //歩いたら反応するように
         else {
-            self.myUserDafault.setInteger(2, forKey: "TUTORIALLIFE")
-            self.myUserDafault.synchronize()
+            self.ud.setInteger(2, forKey: "TUTORIALLIFE")
+            self.ud.synchronize()
             if(walkTestTimer == nil || walkTestTimer.valid == false){ //ないので生成します,あるっぽいけど動いてないっぽいので生成します
                 walkTestTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "walkTestUpdate", userInfo: nil, repeats: true)
             }
-            if(myUserDafault.boolForKey("bgm") == true){
+            if(ud.boolForKey("bgm") == true){
                 volumeChange.systemVolumeChange(0.8)
             }
         }
     }
     func moveTitle(){
-        if(myUserDafault.boolForKey("bgm") == true){
-            myUserDafault.setInteger(5, forKey: "TUTORIALLIFE")
-            myUserDafault.synchronize()
+        if(ud.boolForKey("bgm") == true){
+            ud.setInteger(5, forKey: "TUTORIALLIFE")
+            ud.synchronize()
         }
         else{
-            myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
-            myUserDafault.synchronize()
+            ud.setInteger(4, forKey: "TUTORIALLIFE")
+            ud.synchronize()
         }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -488,8 +531,8 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         view.addSubview(backgroundImageView)
         
         //次シーンで使うもの
-        self.myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
-        self.myUserDafault.synchronize()
+        self.ud.setInteger(4, forKey: "TUTORIALLIFE")
+        self.ud.synchronize()
         
         self.view.backgroundColor = UIColor.grayColor()
     }

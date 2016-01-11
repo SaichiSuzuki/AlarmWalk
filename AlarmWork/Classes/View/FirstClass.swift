@@ -9,57 +9,22 @@
 import UIKit
 
 class FirstClass{
-    func playBoyCheck() -> Bool{
-        let myUserDefault:NSUserDefaults = NSUserDefaults()
-        if(myUserDefault.boolForKey("PLAY_BOY")){ //2回目以降
-            return true
-        }
-        else{ //初めて
-            myUserDefault.setBool(true, forKey: "PLAY_BOY")
-            myUserDefault.synchronize()
-            //////////////////////////////////////
-            ////////////// 初期設定 ///////////////
-            //////////////////////////////////////
-            //音楽設定
-            let myUserDafault:NSUserDefaults = NSUserDefaults()
-            myUserDafault.setObject("You_wanna_fightC", forKey: "MUSIC_NAME")
-            myUserDafault.synchronize()
-            //言語設定
-            myUserDafault.setInteger(1, forKey: "LANGUAGE") //初期は日本語
-            myUserDafault.synchronize()
-            //歩数設定
-            myUserDafault.setInteger(3, forKey: "LIFEFINAL")
-            myUserDafault.setInteger(3, forKey: "LIFE")
-            myUserDafault.synchronize()
-            //オンオフ設定
-            myUserDafault.setBool(false, forKey: "ONOFF")
-            myUserDafault.synchronize()
-            //ランダムかどうか設定
-            myUserDafault.setBool(false, forKey: "IS_RAND")
-            myUserDafault.synchronize()
-            //セル位置設定
-            myUserDafault.setInteger(0, forKey: "INDEX_PATH")
-            myUserDafault.synchronize()
-            //広告出すかどうか設定
-            myUserDafault.setBool(false, forKey: "RegularUser_Ads")
-            myUserDafault.synchronize()
-            //テスト歩数計
-            myUserDafault.setInteger(4, forKey: "TUTORIALLIFE")
-            myUserDafault.synchronize()
-            //音楽なってるか設定
-            myUserDafault.setBool(false, forKey: "bgm")
-            myUserDafault.synchronize()
-            //1歩目か初期化
-            myUserDafault.setBool(false, forKey: "HAJIMEIPPO_STILL") //1歩目か初期化
-            myUserDafault.synchronize()
-            //プッシュ通知初期化
-            myUserDafault.setBool(false, forKey: "PUSH")
-            myUserDafault.synchronize()
-            //課金初期化
-            myUserDafault.setBool(false, forKey: "PURCHASE_MUSIC")
-            myUserDafault.synchronize()
-            
-            return false
-        }
+    /**
+     初期値設定
+     */
+    func setDefault() {
+        let ud = NSUserDefaults.standardUserDefaults()
+        let dic: Dictionary = ["PLAY_BOY":0, "MUSIC_NAME":"You_wanna_fightC", "LANGUAGE":1, "LIFEFINAL":3, "LIFE":3, "ONOFF":false, "IS_RAND":false, "INDEX_PATH":0, "RegularUser_Ads":false, "TUTORIALLIFE":4,"bgm":false,"HAJIMEIPPO_STILL":false, "PUSH":false, "PURCHASE_MUSIC":false, "DAYLY_FLAG":false]
+        ud.registerDefaults(dic) //ユーザーデフォルトに初期値を設定
+        ud.synchronize()
+    }
+    /**
+     データ初期化
+     */
+    func dataInit() {
+        let ud = NSUserDefaults.standardUserDefaults()
+        let dic: Dictionary = ["PLAY_BOY":0, "MUSIC_NAME":"You_wanna_fightC", "LANGUAGE":1, "LIFEFINAL":3, "LIFE":3, "ONOFF":false, "IS_RAND":false, "INDEX_PATH":0, "RegularUser_Ads":false, "TUTORIALLIFE":4,"bgm":false,"HAJIMEIPPO_STILL":false, "PUSH":false, "PURCHASE_MUSIC":false, "DAYLY_FLAG":false]
+        ud.setValuesForKeysWithDictionary(dic)
+        ud.synchronize()
     }
 }

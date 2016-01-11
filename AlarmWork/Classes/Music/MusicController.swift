@@ -45,8 +45,8 @@ struct AVAudioPlayerUtil {
 //        self.audioPlayer[4].prepareToPlay();
 //    }
     static func play(){
-        let musicNameStrPlay:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
-        print("曲名:\(musicNameStrPlay)")
+        let ud = NSUserDefaults.standardUserDefaults()
+        let musicNameStrPlay = ud.stringForKey("MUSIC_NAME")
         AVAudioPlayerUtil.setValue(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStrPlay, ofType: "caf")!));//ファイルセット（再生前事前準備）
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -60,7 +60,8 @@ struct AVAudioPlayerUtil {
         mainSetting();
     }
     static func testPlay(){
-        let musicNameStrTestPlay:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+        let ud = NSUserDefaults.standardUserDefaults()
+        let musicNameStrTestPlay = ud.stringForKey("MUSIC_NAME")!
         AVAudioPlayerUtil.setValueTest(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStrTestPlay, ofType: "caf")!));//ファイルセット（再生前事前準備）
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -87,8 +88,8 @@ struct AVAudioPlayerUtil {
     static func mainSetting(){
         let main = EditViewController() //別クラス参照方法
         main.bgFlag = true
-        main.myUserDafault.setBool(main.bgFlag, forKey: "bgm")
-        main.myUserDafault.synchronize()
+        main.ud.setBool(main.bgFlag, forKey: "bgm")
+        main.ud.synchronize()
     }
     static func playSE(){
         AVAudioPlayerUtil.setValueSE(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("effect_timewarning", ofType: "mp3")!));//ファイルセット（再生前事前準備）
@@ -134,7 +135,8 @@ struct AVAudioPlayerUtil {
     }
     static func stopTest(){
         //ストップで準備は書きたくないがストップのが先に呼ばれるためとりあえず書く
-        let musicNameStrStopTest:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+        let ud = NSUserDefaults.standardUserDefaults()
+        let musicNameStrStopTest = ud.stringForKey("MUSIC_NAME")!
         AVAudioPlayerUtil.setValueTest(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(musicNameStrStopTest, ofType: "caf")!));//ファイルセット（再生前事前準備）
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)

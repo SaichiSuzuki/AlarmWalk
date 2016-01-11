@@ -10,6 +10,7 @@
 		1503344A1BEC3A5100C67976 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 150334491BEC3A5100C67976 /* silence.mp3 */; };
 		153518CB1B7DB9D30091CE43 /* howto1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 153518CA1B7DB9D30091CE43 /* howto1_2.png */; };
 		1552271C1C423F880023DC87 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1552271B1C423F880023DC87 /* Reach.swift */; };
+		1552271E1C434E540023DC87 /* belldayly.png in Resources */ = {isa = PBXBuildFile; fileRef = 1552271D1C434E540023DC87 /* belldayly.png */; };
 		155A3B5F1B75F94B00B39875 /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B5D1B75F94B00B39875 /* AdmobBanner.swift */; };
 		155A3B601B75F94B00B39875 /* AdmobInterstitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B5E1B75F94B00B39875 /* AdmobInterstitial.swift */; };
 		155A3B661B75F99200B39875 /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155A3B641B75F99200B39875 /* HexColor.swift */; };
@@ -122,6 +123,7 @@
 		150334491BEC3A5100C67976 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		153518CA1B7DB9D30091CE43 /* howto1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = howto1_2.png; sourceTree = "<group>"; };
 		1552271B1C423F880023DC87 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reach.swift; path = Tools/Reach.swift; sourceTree = "<group>"; };
+		1552271D1C434E540023DC87 /* belldayly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = belldayly.png; sourceTree = "<group>"; };
 		155A3B5D1B75F94B00B39875 /* AdmobBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdmobBanner.swift; path = Ads/AdmobBanner.swift; sourceTree = "<group>"; };
 		155A3B5E1B75F94B00B39875 /* AdmobInterstitial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdmobInterstitial.swift; path = Ads/AdmobInterstitial.swift; sourceTree = "<group>"; };
 		155A3B641B75F99200B39875 /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexColor.swift; path = Tools/HexColor.swift; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 			children = (
 				153518CA1B7DB9D30091CE43 /* howto1_2.png */,
 				157CFE281B7D9D5E00D749C7 /* musicLibrary.png */,
+				1552271D1C434E540023DC87 /* belldayly.png */,
 				9A2CEE051ABFEB7A0078A7AB /* belloff.png */,
 				9A2CEE061ABFEB7A0078A7AB /* bellon.png */,
 				9A2CEE071ABFEB7A0078A7AB /* bg.png */,
@@ -621,6 +624,7 @@
 				9A2CEE491AC10EA80078A7AB /* chin.mp3 in Resources */,
 				9A2CEE311ABFEB7A0078A7AB /* simaumal03.png in Resources */,
 				9A148C921ACE355A001BEC29 /* Icon-50@2x.png in Resources */,
+				1552271E1C434E540023DC87 /* belldayly.png in Resources */,
 				9A148C9A1ACE355A001BEC29 /* iTunesArtwork@2x.png in Resources */,
 				9A148C971ACE355A001BEC29 /* Icon-76.png in Resources */,
 				9A2CEE2D1ABFEB7A0078A7AB /* pocket2.png in Resources */,

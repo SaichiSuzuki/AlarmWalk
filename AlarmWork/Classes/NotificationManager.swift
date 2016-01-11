@@ -25,7 +25,7 @@ class NotificationManager :UIResponder{
         ud.setBool(false, forKey: "PUSH")
         ud.synchronize()
         NotificationUtil.pushDelete()
-        var timer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: "backThread", userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: "backThread", userInfo: nil, repeats: false)
     }
     
     func backThread(){
@@ -34,13 +34,11 @@ class NotificationManager :UIResponder{
         dispatch_async(backgroundQueue, {
             // Backgroundで行いたい重い処理はここ
             self.pushSixteen()
-            dispatch_async(dispatch_get_main_queue(), {
-                // 処理が終わった後UIスレッドでやりたいことはここ
-            })
         })
     }
     //通知仕込み処理
     func pushSixteen() {
+//        print("仕込み開始")
         var cnt = 0
         //        println(timeDifference)
         let lm = LangManager()
@@ -56,7 +54,7 @@ class NotificationManager :UIResponder{
 //            print("仕込み:\(secondPost+(Double(cnt*postInterval)))")
             let myNotification: UILocalNotification = UILocalNotification()
             myNotification.alertBody = lm.getString(14)
-            let musicNameStr:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+            let musicNameStr = ud.stringForKey("MUSIC_NAME")!
             myNotification.soundName = musicNameStr + ".caf"
             myNotification.timeZone = NSTimeZone.defaultTimeZone()
             myNotification.fireDate = NSDate(timeIntervalSinceNow: secondPost+(Double(cnt*postInterval)))
@@ -66,13 +64,14 @@ class NotificationManager :UIResponder{
         if(ud.boolForKey("PUSH") == false){
             NotificationUtil.pushDelete()
         }
+//        print("仕込み完了")
     }
 }
 
 struct NotificationUtil {
     static func pushDelete(){
         //全てのローカル通知を削除する。（過去のローカル通知を削除する）
-//        println("通知削除")
+//        print("通知削除")
         UIApplication.sharedApplication().cancelAllLocalNotifications()
     }
 }

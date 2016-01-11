@@ -56,10 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegat
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
-        let myUserDafault:NSUserDefaults = NSUserDefaults()
-        let bgFlag:Bool = myUserDafault.boolForKey("bgm")
+        let ud:NSUserDefaults = NSUserDefaults()
+        let bgFlag:Bool = ud.boolForKey("bgm")
         
-        let musicNameStr:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+        let musicNameStr:String = ud.stringForKey("MUSIC_NAME")!
         
         if(bgFlag==true){
             NotificationUtil.pushDelete()
@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegat
     }
     func musicCome(){
         let main = EditViewController()
-        main.bgFlag = main.myUserDafault.boolForKey("bgm")
+        main.bgFlag = main.ud.boolForKey("bgm")
         //main.alertComeCheck()
         if(main.bgFlag==true){
             //println("bgm trueだから流しとくかな")
@@ -106,14 +106,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegat
             //一歩目限定イベント
             //            let mc = musicController() //音楽コントローラ
             
-            if(main.myUserDafault.boolForKey("HAJIMEIPPO_STILL") == true){
+            if(main.ud.boolForKey("HAJIMEIPPO_STILL") == true){
                 AVAudioPlayerUtil.playMusicVolumeSetting(1.0)
             }
             else{
                 AVAudioPlayerUtil.playMusicVolumeSetting(0.05)
             }
-            main.myUserDafault.setInteger(5, forKey: "TUTORIALLIFE") //5は通常稼働
-            main.myUserDafault.synchronize()
+            main.ud.setInteger(5, forKey: "TUTORIALLIFE") //5は通常稼働
+            main.ud.synchronize()
         }
         else{
             main.noMusicInit()
@@ -121,11 +121,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegat
     }
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        let myUserDafault:NSUserDefaults = NSUserDefaults()
-        if(myUserDafault.boolForKey("bgm")==true){
+        let ud:NSUserDefaults = NSUserDefaults()
+        if(ud.boolForKey("bgm")==true){
             NotificationUtil.pushDelete()
             let lm = LangManager()
-            let musicNameStr:String = NSUserDefaults.standardUserDefaults().stringForKey("MUSIC_NAME")!
+            let musicNameStr:String = ud.stringForKey("MUSIC_NAME")!
             for(var i=0;i<60;i++){
                 let myNotification: UILocalNotification = UILocalNotification()
                 myNotification.alertBody = lm.getString(13)
