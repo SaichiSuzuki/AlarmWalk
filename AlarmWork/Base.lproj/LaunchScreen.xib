@@ -12,10 +12,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="PjZ-P4-Jts">
-                    <rect key="frame" x="40" y="46" width="466" height="466"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="466" id="n73-Eo-jRE"/>
-                    </constraints>
+                    <rect key="frame" x="100" y="-228" width="320" height="1024"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlarmWalkSplash.png" translatesAutoresizingMaskIntoConstraints="NO" id="VM5-gr-Z1L">
                     <rect key="frame" x="20" y="187" width="280" height="193"/>
@@ -23,12 +20,13 @@
             </subviews>
             <color key="backgroundColor" red="0.60784313725490191" green="0.6705882352941176" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="VM5-gr-Z1L" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="AeC-VC-ftX"/>
-                <constraint firstItem="VM5-gr-Z1L" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="L0z-Mf-Thr"/>
-                <constraint firstItem="PjZ-P4-Jts" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="dPa-hv-WD9"/>
-                <constraint firstItem="VM5-gr-Z1L" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="jnG-Yq-GJX"/>
-                <constraint firstAttribute="bottom" secondItem="PjZ-P4-Jts" secondAttribute="bottom" constant="56" id="kyX-mQ-CrQ"/>
-                <constraint firstItem="PjZ-P4-Jts" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="46" id="pcE-Y4-rVl"/>
+                <constraint firstItem="PjZ-P4-Jts" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="100" id="5Mu-1S-yog"/>
+                <constraint firstItem="VM5-gr-Z1L" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="8y3-3N-wLw"/>
+                <constraint firstAttribute="trailing" secondItem="PjZ-P4-Jts" secondAttribute="trailing" constant="-100" id="BMv-HT-Cjs"/>
+                <constraint firstItem="PjZ-P4-Jts" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="PwD-aW-Csa"/>
+                <constraint firstItem="VM5-gr-Z1L" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Tke-5h-AIs"/>
+                <constraint firstAttribute="trailing" secondItem="VM5-gr-Z1L" secondAttribute="trailing" constant="20" id="d5j-yi-4hC"/>
+                <constraint firstItem="VM5-gr-Z1L" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="jbc-H6-uxm"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

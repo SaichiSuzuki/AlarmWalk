@@ -46,7 +46,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //バイブ感覚
     var vibInterval:Double = 3
     //暗号数
-    var cryptographyNum = 1 //デフォルトは20
+    var cryptographyNum = 20 //デフォルトは20
     //使用カラー
     var colorCode = "ffffff" //青系 4169E1
     // センターライン
@@ -408,8 +408,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         alertComeCheck() //アラートからきたかチェック
         if(alartFlag){
             alartFlag = false
-            let lm = LangManager()
-            self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
+//            let lm = LangManager()
+//            self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
         }
     }
     override func viewDidLoad() {
@@ -1014,6 +1014,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         myDatePicker.backgroundColor = UIColor.grayColor()
         myDatePicker.layer.shadowOpacity = 0.5
         myDatePicker.layer.opacity = 0.6
+        myDatePicker.tintColor = UIColor.redColor()
+        myDatePicker.setValue(UIColor.whiteColor(), forKey: "textColor")
         
         // 値が変わった際のイベントを登録する.
         myDatePicker.addTarget(self, action: "onDidChangeDate:", forControlEvents: .ValueChanged)
