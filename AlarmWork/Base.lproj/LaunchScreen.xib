@@ -11,24 +11,24 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="PjZ-P4-Jts">
+                <imageView userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="PjZ-P4-Jts">
                     <rect key="frame" x="40" y="46" width="466" height="466"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="466" id="NmY-HA-qdM"/>
+                        <constraint firstAttribute="width" constant="466" id="n73-Eo-jRE"/>
                     </constraints>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlarmWalkSplash.png" translatesAutoresizingMaskIntoConstraints="NO" id="VM5-gr-Z1L">
                     <rect key="frame" x="20" y="187" width="280" height="193"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.60784313725490191" green="0.6705882352941176" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="VM5-gr-Z1L" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="0b1-dR-n3L"/>
-                <constraint firstAttribute="centerY" secondItem="VM5-gr-Z1L" secondAttribute="centerY" constant="1" id="3qo-Q6-Ipt"/>
-                <constraint firstItem="PjZ-P4-Jts" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="BXB-tG-iCo"/>
-                <constraint firstAttribute="centerX" secondItem="PjZ-P4-Jts" secondAttribute="centerX" constant="-50" id="WpS-oy-whl"/>
-                <constraint firstAttribute="centerX" secondItem="VM5-gr-Z1L" secondAttribute="centerX" id="gS5-bC-4KF"/>
-                <constraint firstAttribute="centerY" secondItem="PjZ-P4-Jts" secondAttribute="centerY" constant="1" id="oxY-x4-jxU"/>
+                <constraint firstItem="VM5-gr-Z1L" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="AeC-VC-ftX"/>
+                <constraint firstItem="VM5-gr-Z1L" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="L0z-Mf-Thr"/>
+                <constraint firstItem="PjZ-P4-Jts" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="dPa-hv-WD9"/>
+                <constraint firstItem="VM5-gr-Z1L" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="jnG-Yq-GJX"/>
+                <constraint firstAttribute="bottom" secondItem="PjZ-P4-Jts" secondAttribute="bottom" constant="56" id="kyX-mQ-CrQ"/>
+                <constraint firstItem="PjZ-P4-Jts" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="46" id="pcE-Y4-rVl"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

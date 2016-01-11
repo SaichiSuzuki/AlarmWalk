@@ -907,7 +907,9 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             timeDifference = 86400 - timeDifference
         }
         ud.setInteger(nowSecond, forKey: "pastTime")
+        ud.synchronize()
         ud.setInteger(timeDifference, forKey: "differenceTime")
+        ud.synchronize()
         ud.setInteger(planTimeSecond, forKey: "PLANSECOND")
         ud.synchronize()
         timeSave() //設定時刻の保存
@@ -1398,6 +1400,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     func timeSave(){
         let time = timeConverter(ud.integerForKey("PLANSECOND"))
         ud.setInteger(time.0, forKey: "SET_HOUR")
+        ud.synchronize()
         ud.setInteger(time.1, forKey: "SET_MINUTE")
         ud.synchronize()
     }
