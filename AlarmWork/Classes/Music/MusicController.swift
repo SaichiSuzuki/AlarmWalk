@@ -118,8 +118,8 @@ struct AVAudioPlayerUtil {
         }
         self.audioPlayer[2].play();
     }
-    static func playTestFinish(){
-        AVAudioPlayerUtil.setValueFinish(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("chin", ofType: "mp3")!));//ファイルセット（再生前事前準備）
+    static func playSE(file: String){
+        AVAudioPlayerUtil.setValueFinish(NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(file, ofType: "mp3")!));//ファイルセット（再生前事前準備）
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         } catch _ {

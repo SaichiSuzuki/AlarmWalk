@@ -31,8 +31,10 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     
     var titleBtn = UIButton()
     
-    //背景画像
+    // 背景画像
     var backgroundImageView: UIImageView!
+    // 隠し広告
+    var zebraAdsImage: UIImageView!
     // 画像を設定する.
     let bgInputImage = CIImage(image: UIImage(named: "scrollBackground.png")!)
     
@@ -186,7 +188,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
                 footLabel.text = "ok"
             }
             if(footCount == 0){
-                AVAudioPlayerUtil.playTestFinish()
+                AVAudioPlayerUtil.playSE("chin")
             }
         }
     }
@@ -344,18 +346,10 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         effectView.frame = CGRect(x: 0, y: 0, width: winSize.width, height: 30)
         soundLabel.addSubview(effectView);
         //隠し広告
-        let zebraAdsImage = CIImage(image: UIImage(named: "zebraAds.png")!)
-        let zebraAdsButton = UIButton(frame: CGRectMake(0, 0, 320 * 0.8, 180 * 0.8))
-        zebraAdsButton.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        //        zebraAdsButton.frame = CGRectMake(-winSize.width, winSize.height - 130, winSize.width/2, winSize.width/9)
-        zebraAdsButton.layer.position = CGPoint(x: -150, y:winSize.height/2)
-        zebraAdsButton.setImage(UIImage(CIImage: zebraAdsImage!), forState: .Normal)
-        zebraAdsButton.addTarget(self, action: "adsButtonAction:", forControlEvents:.TouchDown)
-        //        //隠れゼブラ
-        //        let zebraImage:UIImage = UIImage(named:"simaumal03.png")!
-        //        var zebraView:UIImageView = UIImageView(image:zebraImage)
-        //        zebraView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        //        zebraView.frame = CGRectMake(-winSize.width/2, winSize.height - 166, 25, 25) //173浮いてる
+        zebraAdsImage = UIImageView(frame: CGRectMake(0, 0, 320 * 0.8, 180 * 0.8))
+        zebraAdsImage.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        zebraAdsImage.layer.position = CGPoint(x: -150, y:winSize.height/2)
+        zebraAdsImage.image = UIImage(named: "zebraAds.png")
         
         //2ページの補足説明
         let pocketLabel:UILabel = UILabel(frame: CGRectMake(winSize.width, 100, winSize.width, 50))
@@ -381,7 +375,7 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         //        iphoneView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         //        iphoneView.frame = CGRectMake(winSize.width * 3 + winSize.width/2 - 150, winSize.height/2 - 100, 300, 200)
         
-        scrollView.addSubview(zebraAdsButton)
+        scrollView.addSubview(zebraAdsImage)
         //        scrollView.addSubview(zebraView)
         scrollView.addSubview(pocketLabel)
         scrollView.addSubview(myLabel)
@@ -535,6 +529,44 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
         self.ud.synchronize()
         
         self.view.backgroundColor = UIColor.grayColor()
+    }
+    
+    var pullFlag = false
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if ud.integerForKey("ZEBRA_LIFE") > 0 {
+            if !pullFlag && scrollView.contentOffset.x < -130 {
+                pullFlag = true
+                ud.setInteger(0, forKey: "ZEBRA_LIFE")
+                ud.synchronize()
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.adsAnimation() // 広告アニメーション
+                })
+            }
+        }
+    }
+    
+    func adsAnimation() {
+        // 画像差し替え
+        zebraAdsImage.image = UIImage(named: "zebraAds_nullzebra.png")
+        // ブロック生成
+//        blockTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "blockCreate", userInfo: nil, repeats: true)
+        blockCreate()
+        // ゼブラ生成(アニメーション(動き、画像))
+        let zebra = ZebraController(frame: CGRectMake(-297, winSize.height/2 + 43, 70, 70))
+        self.scrollView.addSubview(zebra)
+        zebra.animationStart()
+    }
+    
+    var blockTimer: NSTimer!
+    var blockCount = 18
+    var blockSize:CGFloat = 15
+    func blockCreate() {
+        for (var i=0; i<blockCount; i++){
+            let imageView = UIImageView(frame: CGRect(x: -250 + (CGFloat(i) * blockSize),y: winSize.height/2 + 90,width: blockSize,height: blockSize))
+            imageView.image = UIImage(named: "block.png")
+            self.scrollView.addSubview(imageView)
+        }
+        AVAudioPlayerUtil.playSE("kick")
     }
     
     override func viewDidDisappear(animated:Bool)

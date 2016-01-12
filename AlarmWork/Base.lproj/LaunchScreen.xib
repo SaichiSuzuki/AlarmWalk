@@ -11,6 +11,9 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg_blue.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="6HE-lV-C3w">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </imageView>
                 <imageView userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="PjZ-P4-Jts">
                     <rect key="frame" x="100" y="-228" width="320" height="1024"/>
                 </imageView>
@@ -35,6 +38,7 @@
     </objects>
     <resources>
         <image name="AlarmWalkSplash.png" width="497" height="193"/>
+        <image name="bg_blue.jpg" width="908" height="1276"/>
         <image name="splash.png" width="1024" height="1024"/>
     </resources>
 </document>

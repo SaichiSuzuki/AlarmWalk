@@ -659,6 +659,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                         self.alartFlag = true
                         self.ud.setInteger(4, forKey: "TUTORIALLIFE")
                         self.ud.synchronize()
+                        self.ud.setInteger(1, forKey: "ZEBRA_LIFE")
+                        self.ud.synchronize()
 //                        self.ai.showAds()
                         self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
                     }
