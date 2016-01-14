@@ -38,7 +38,7 @@
     </objects>
     <resources>
         <image name="AlarmWalkSplash.png" width="497" height="193"/>
-        <image name="bg_blue.jpg" width="908" height="1276"/>
+        <image name="bg_blue.jpg" width="640" height="960"/>
         <image name="splash.png" width="1024" height="1024"/>
     </resources>
 </document>

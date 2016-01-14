@@ -140,8 +140,8 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     //画面サイズ取得
     var winSize:CGRect!
     //現在時刻取得
-    var calendar = NSCalendar.currentCalendar()
-    var comps:NSDateComponents!
+    var calendar = NSCalendar.currentCalendar() //ただのカレンダー
+    var comps:NSDateComponents! //カレンダーを使いやすくする型
     
     let volumeChange = SystemVolumeController()
     
@@ -152,7 +152,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     ///////
     var pointLabel:UILabel!//ポイントラベル
     //設定時刻ラベル
-    var setTimeLabel: UILabel!//時間表示テキストフィールド
+    var clockLabel: UILabel!//時間表示テキストフィールド
     //ギブアップボタン
     var giveUpBtn: UIButton!
     //音楽選択ボタン
@@ -258,7 +258,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             onOffFlag = true
             self.mannerModeLabel.text = lm.getString(11)
             bellImageView.image = bellOnImage
-            setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            clockLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             ud.setBool(true, forKey: "HAJIMEIPPO_STILL")
             ud.synchronize()
             
@@ -277,7 +277,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             ud.setBool(false, forKey: "PUSH")
             ud.synchronize()
             bellImageView.image = bellOffImage
-            setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
+            clockLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
             UIView.animateWithDuration(1.0, animations: {() -> Void in
                 self.mannerModeLabel.center = CGPoint(x: -self.mannerModeLabel.bounds.width,y: self.winSize.height/2 + 40)
                 }, completion: {(Bool) -> Void in
@@ -306,10 +306,11 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                 self.settingAlarmTime()
             }
             dispatch_async(dispatch_get_main_queue(), {
+                // 処理が終わった後UIスレッドでやりたいことはここ
                 if sender.on == true {
                     self.pushNotification()
+                    self.volumeChange.systemVolumeChange(1.0) //システム音変更
                 }
-                // 処理が終わった後UIスレッドでやりたいことはここ
             })
         })
         
@@ -466,6 +467,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         comps = calendar.components([NSCalendarUnit.NSYearCalendarUnit, NSCalendarUnit.NSMonthCalendarUnit, NSCalendarUnit.NSDayCalendarUnit, NSCalendarUnit.NSHourCalendarUnit, NSCalendarUnit.NSMinuteCalendarUnit, NSCalendarUnit.NSSecondCalendarUnit],
             fromDate: now)
         ud.setInteger(comps.hour, forKey: "ONCEHOUR")
+        ud.synchronize()
         ud.setInteger(comps.minute, forKey: "ONCEMINUTE")
         ud.synchronize()
         
@@ -891,7 +893,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
         setTime(planComps.hour, m: planComps.minute) //時間ラベル更新
         updateSettingTimeDifference() // 設定時間後の時間を更新する
-        volumeChange.systemVolumeChange(1.0) //システム音変更
     }
     
     // 設定時間後の時間を更新
@@ -904,7 +905,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             planTimeSecond += 86400
         }
         timeDifference = planTimeSecond - nowSecond
-        if(timeDifference<0){
+        if(timeDifference<0){ //現在時間より数字的に前だった場合
             timeDifference = Int(numberConversion(Double(timeDifference)))
             timeDifference = 86400 - timeDifference
         }
@@ -993,11 +994,11 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         // 設定時間ラベル作成
         let hou = ud.integerForKey("SET_HOUR")
         let min = ud.integerForKey("SET_MINUTE")
-        setTimeLabel = UILabel(frame: CGRectMake(0,0,winSize.width,winSize.height))
-        setTimeLabel.layer.position = CGPoint(x: winSize.width/2,y: winSize.height/2 + 100);
-        setTimeLabel.textAlignment = NSTextAlignment.Center
-        setTimeLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 80)
-        setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        clockLabel = UILabel(frame: CGRectMake(0,0,winSize.width,winSize.height))
+        clockLabel.layer.position = CGPoint(x: winSize.width/2,y: winSize.height/2 + 100);
+        clockLabel.textAlignment = NSTextAlignment.Center
+        clockLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 80)
+        clockLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         getNowTime()
         setTime(comps.hour, m: comps.minute) //時間ラベル更新
         //        println("現在時間セット\(comps.hour):\(comps.minute)")
@@ -1170,7 +1171,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         bellImageView.addGestureRecognizer(bellTapBtn)
         self.view.addSubview(alarmSwitch)
         
-        self.view.addSubview(setTimeLabel)
+        self.view.addSubview(clockLabel)
         self.view.addSubview(wrapperView)
         self.view.addSubview(mannerModeLabel)
         
@@ -1249,11 +1250,11 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             } else {
                 bellImageView.image = bellOnImage
             }
-            setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            clockLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
         else {
             bellImageView.image = bellOffImage
-            setTimeLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
+            clockLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
         }
         bgColorChange()
     }
@@ -1318,12 +1319,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     
     //時間セットラベル変更
     func setTime(h:Int, m:Int){
-        if(setTimeLabel == nil){
-            setTimeLabel = UILabel(frame: CGRectMake(0,-500,0,0))
-        }
-        setTimeLabel.text = "\(h):\(m)"  /**たまにここで止まる*/
+//        if(setTimeLabel == nil){
+//            setTimeLabel = UILabel(frame: CGRectMake(0,-500,0,0))
+//        }
+        clockLabel.text = "\(h):\(m)"  /**たまにここで止まる*/
         if(m<10){
-            setTimeLabel.text = "\(h):0\(m)"
+            clockLabel.text = "\(h):0\(m)"
         }
     }
     func pushAuthorization(){
