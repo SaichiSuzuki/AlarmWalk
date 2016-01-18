@@ -43,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegat
         // ロック画面やコントロールセンターに再生ボタンなどのコントロールを表示する
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
 
+        //バッジの数を0にする.
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
 
         return true
     }
@@ -71,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegat
                 myNotification.alertBody = lm.getString(13)
                 // 再生サウンドを設定する.
                 myNotification.soundName = musicNameStr + ".caf"
+                myNotification.applicationIconBadgeNumber = 1
                 // Timezoneを設定する.
                 myNotification.timeZone = NSTimeZone.defaultTimeZone()
                 // 10秒後に設定する.
@@ -130,6 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SORPurchaseManagerDelegat
                 let myNotification: UILocalNotification = UILocalNotification()
                 myNotification.alertBody = lm.getString(13)
                 myNotification.soundName = musicNameStr + ".caf"
+                myNotification.applicationIconBadgeNumber = 1
                 myNotification.timeZone = NSTimeZone.defaultTimeZone()
                 // 10秒後に設定する.
                 myNotification.fireDate = NSDate(timeIntervalSinceNow: 1+(Double(i)*30))

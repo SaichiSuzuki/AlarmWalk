@@ -155,6 +155,10 @@ struct AVAudioPlayerUtil {
 //        AVAudioSession.sharedInstance().setActive(true, error: nil)
 //        self.audioPlayer[4].stop();
 //    }
+    /**
+    アプリ内での音量(iPhoneではない)
+    - parameter v: 音量割合
+    */
     static func playMusicVolumeSetting(v:Float){
         self.audioPlayer[0].volume = v
     }

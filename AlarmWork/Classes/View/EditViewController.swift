@@ -261,13 +261,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             clockLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             ud.setBool(true, forKey: "HAJIMEIPPO_STILL")
             ud.synchronize()
-            
             UIView.animateWithDuration(1.0, animations: {() -> Void in
                 self.mannerModeLabel.center = CGPoint(x: self.winSize.width/2,y: self.winSize.height/2 + 40);
                 }, completion: {(Bool) -> Void in
                     self.mannerModeLabel.text = lm.getString(11);
             })
-            NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "mannerLabelReturn", userInfo: nil, repeats: false)
+            NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "mannerLabelMoveReturn", userInfo: nil, repeats: false)
             AVAudioPlayerUtil.silencePlay();//再生
         } else {
             //            switchPushOverFlag = false
@@ -283,31 +282,31 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                 }, completion: {(Bool) -> Void in
                     self.mannerModeLabel.text = lm.getString(11)
             })
-            NotificationUtil.pushDelete()
             AVAudioPlayerUtil.stop()
             ud.setBool(false, forKey: "DAYLY_FLAG")
             ud.synchronize()
         }
         ud.setBool(onOffFlag, forKey: "ONOFF")
         ud.synchronize()
-        let isRand = ud.boolForKey("IS_RAND")
-        if(isRand == true){
+        
+        if ud.boolForKey("IS_RAND") {
             let rm = RandMusic()
             ud.setObject(rm.getRandMusic(), forKey: "MUSIC_NAME")
             ud.synchronize()
-            //            println("通知音変更:\(rm.getRandMusic())")
+//            print(ud.stringForKey("MUSIC_NAME"))
         }
         
         let qualityOfServiceClass = DISPATCH_QUEUE_PRIORITY_DEFAULT
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
         dispatch_async(backgroundQueue, {
             // Backgroundで行いたい重い処理はここ
-            if sender.on == true {
-                self.settingAlarmTime()
-            }
+//            if sender.on == true {
+//                self.settingAlarmTime()
+//            }
             dispatch_async(dispatch_get_main_queue(), {
                 // 処理が終わった後UIスレッドでやりたいことはここ
                 if sender.on == true {
+                    self.settingAlarmTime()
                     self.pushNotification()
                     self.volumeChange.systemVolumeChange(1.0) //システム音変更
                 }
@@ -415,6 +414,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        splashAnimation()
         //課金リセット
         //        let ud = NSUserDefaults.standardUserDefaults()
         //        ud.setBool(false, forKey: "PURCHASE_MUSIC")
@@ -652,8 +652,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                     AVAudioPlayerUtil.playSE();//再生
                     //ライフポイントが尽きたら
                     if(self.lifePoints<1 && self.bgFlag==true){
-                        let lm = LangManager()
-                        self.musicStop()
+                        NotificationUtil.pushDelete()
                         if(self.vibTimer != nil){
                             self.vibTimer.invalidate() //バイブ終了
                         }
@@ -664,7 +663,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                         self.ud.setInteger(1, forKey: "ZEBRA_LIFE")
                         self.ud.synchronize()
 //                        self.ai.showAds()
-                        self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
+                        //バッジの数を0にする.
+                        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.musicStop()
+                            NSTimer.scheduledTimerWithTimeInterval(1.5, target: self, selector: "morningAlart", userInfo: nil, repeats: false)
+                        })
                     }
                     dispatch_async(dispatch_get_main_queue(), {
                         self.pointLabel.text = "\(self.lifePoints)"
@@ -690,6 +694,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             /*-------------*/
         }
     }
+    
+    func morningAlart() {
+        let lm = LangManager()
+        self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
+    }
+    
     //一歩目限定イベント
     func ippome(){
         self.ud.setBool(false, forKey: "HAJIMEIPPO_STILL")
@@ -891,7 +901,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             planComps.hour = ud.integerForKey("ONCEHOUR")
             planComps.minute = ud.integerForKey("ONCEMINUTE")
         }
-        setTime(planComps.hour, m: planComps.minute) //時間ラベル更新
+        setClockLabel(planComps.hour, m: planComps.minute) //時間ラベル更新
         updateSettingTimeDifference() // 設定時間後の時間を更新する
     }
     
@@ -1000,12 +1010,12 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         clockLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 80)
         clockLabel.textColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         getNowTime()
-        setTime(comps.hour, m: comps.minute) //時間ラベル更新
+        setClockLabel(comps.hour, m: comps.minute) //時間ラベル更新
         //        println("現在時間セット\(comps.hour):\(comps.minute)")
 //        if(onOffFlag == true && bgFlag == false){
         if(onOffFlag == true){
             //            println("予定時間セット\(hou):\(min)")
-            setTime(hou, m: min) //時間ラベル更新
+            setClockLabel(hou, m: min) //時間ラベル更新
         }
         
         // DatePickerを生成する.
@@ -1317,16 +1327,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         self.view.addSubview(effectView)
     }
     
-    //時間セットラベル変更
-    func setTime(h:Int, m:Int){
-//        if(setTimeLabel == nil){
-//            setTimeLabel = UILabel(frame: CGRectMake(0,-500,0,0))
-//        }
-        clockLabel.text = "\(h):\(m)"  /**たまにここで止まる*/
-        if(m<10){
-            clockLabel.text = "\(h):0\(m)"
-        }
-    }
     func pushAuthorization(){
         // 許可がされてなければ
         if(!isEnabled()){
@@ -1501,7 +1501,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     
     //アラート出力
     func openAlert(titleStr:String, messageStr:String, okStr:String){
-        NotificationUtil.pushDelete()
         let alert:UIAlertController = UIAlertController(title:titleStr,
             message: messageStr,
             preferredStyle: UIAlertControllerStyle.Alert)
@@ -1517,6 +1516,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         alert.addAction(defaultAction)
         presentViewController(alert, animated: true, completion: nil)
     }
+    
     func firstContactCheck(){
         let fc = FirstClass()
         fc.setDefault()
@@ -1527,6 +1527,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "sceneChange", userInfo: nil, repeats: false)
         }
     }
+    
     func sceneChange(){
         ud.setBool(bgFlag, forKey: "bgm")
         ud.synchronize()
@@ -1534,6 +1535,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         mySecondViewController.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
         presentViewController(mySecondViewController, animated: true, completion: nil)
     }
+    
     ////////////////////////////////////////////////
     ////~~~~MUSIC~~~~///////////////////////////////
     ////////////////////////////////////////////////
@@ -1551,14 +1553,14 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     }
     
     func musicStop(){
-        if(self.bgFlag==true){
+        if self.bgFlag {
+            self.bgFlag = false
             if ud.boolForKey("DAYLY_FLAG") {
                 updateSettingTimeDifference() // 設定時間後の時間を更新する
                 self.pushNotification()
             } else {
                 self.onOffFlag = false
             }
-            self.bgFlag = false
             ud.setBool(self.bgFlag, forKey: "bgm")
             ud.synchronize()
             ud.setBool(self.onOffFlag, forKey: "ONOFF")
@@ -1582,7 +1584,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         self.ud.setBool(false, forKey: "HAJIMEIPPO_STILL") //1歩目か初期化
         self.ud.synchronize()
         pointLabel.text = "\(lifePoints)"
-        if(onOffFlag == false){
+        if !onOffFlag {
             NotificationUtil.pushDelete()
         }
         objectMove() //オブジェクト移動
@@ -1598,19 +1600,19 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             if let type: AnyObject = userInfos["AVAudioSessionInterruptionTypeKey"] {
                 if type is NSNumber {
                     if type.unsignedLongValue == AVAudioSessionInterruptionType.Began.rawValue{
-                        print("割り込みきた")
+//                        print("割り込みきた")
                         if (bgFlag == true && AVAudioPlayerUtil.audioPlayer[0].playing) {
                             //AVAudioPlayerUtil.stop()
                         }
                     }
                     if type.unsignedLongValue == AVAudioSessionInterruptionType.Ended.rawValue{
-                        print("割り込み終わっ・", terminator: "")
+//                        print("割り込み終わっ・", terminator: "")
                         if (bgFlag == true  && AVAudioPlayerUtil.audioPlayer[0].playing == false) {
                             // 現在再生していないなら再生
-                            print("・・・", terminator: "")
+//                            print("・・・", terminator: "")
                             AVAudioPlayerUtil.play() //再生
                         }
-                        print("た")
+//                        print("た")
                     }
                 }
             }
@@ -1618,22 +1620,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
     }
     //イヤホン挿したり？
     func audioSessionRouteChange(notification: NSNotification) {
-        //        if let userInfos = notification.userInfo {
-        //            if let type: AnyObject = userInfos["AVAudioSessionRouteChangeReasonKey"] {
-        //                if type is NSNumber {
-        //                    if type.unsignedLongValue == AVAudioSessionRouteChangeReason.NewDeviceAvailable.rawValue{
-        //                        println("NewDeviceAvailable")
-        //                    }
-        //                    if type.unsignedLongValue == AVAudioSessionRouteChangeReason.Override.rawValue{
-        //                        println("Override")
-        //                    }
-        //                }
-        //            }
-        //        }
         for port in session.currentRoute.outputs {
-            //            println(port.portName)
-            //            println(port.portType)
-            //            println(port.UID)
             if port.portType == AVAudioSessionPortBuiltInSpeaker {
                 //内臓スピーカが選ばれている時の処理
 //                print("スピーカ")
@@ -1677,7 +1664,7 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         NSNotificationCenter.defaultCenter().postNotification(noti)
     }
     
-    func mannerLabelReturn(){
+    func mannerLabelMoveReturn(){
         let lm = LangManager()
         //        if(mannerCautionTimer != nil){
         //            mannerCautionTimer.invalidate()
@@ -1716,10 +1703,40 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         }
     }
     
+    /**
+     スプラッシュ画面を使ってアニメーションする
+     */
+    func splashAnimation() {
+        let xibView:UIView = UINib(nibName: "LaunchScreen", bundle: nil).instantiateWithOwner(self, options: nil)[0] as! UIView
+        xibView.frame = CGRectMake(0, 0, view.frame.width, view.frame.height)
+        xibView.layer.zPosition = 4
+        self.view.addSubview(xibView)
+        
+        UIView.transitionWithView(
+            xibView, // 対象のビュー
+            duration: 2.0,  // アニメーションの時間
+            options: UIViewAnimationOptions.CurveEaseOut, // アニメーション変化オプション
+            animations: {() -> Void  in
+                xibView.alpha = 0
+            },
+            completion: {(finished: Bool) -> Void in
+        })
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    //////////////////////////////////////
+    /////////// getter,setter ////////////
+    //////////////////////////////////////
+    
+    //時間セットラベル変更
+    func setClockLabel(h:Int, m:Int){
+        clockLabel.text = "\(h):\(m)"  /**たまにここで止まる*/
+        if(m<10){
+            clockLabel.text = "\(h):0\(m)"
+        }
+    }
 }
-
-

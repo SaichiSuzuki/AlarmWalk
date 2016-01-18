@@ -12,11 +12,12 @@ class NotificationManager :UIResponder{
     //通知回数
     var postTime = 80
     //設定時間と現在時刻の差
-    var timeDifference = 0 //もらわないと
+    var timeDifference = 0
     //通知間隔時間
     var postInterval = 17
     
     init(diff:Int){
+//        print("\(diff)秒後にセットします")
         self.timeDifference = diff
     }
     //プッシュ通知設定行う
@@ -56,6 +57,7 @@ class NotificationManager :UIResponder{
             myNotification.alertBody = lm.getString(14)
             let musicNameStr = ud.stringForKey("MUSIC_NAME")!
             myNotification.soundName = musicNameStr + ".caf"
+            myNotification.applicationIconBadgeNumber = 1
             myNotification.timeZone = NSTimeZone.defaultTimeZone()
             myNotification.fireDate = NSDate(timeIntervalSinceNow: secondPost+(Double(cnt*postInterval)))
             UIApplication.sharedApplication().scheduleLocalNotification(myNotification)

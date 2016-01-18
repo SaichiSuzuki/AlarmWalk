@@ -14,10 +14,23 @@ class SystemVolumeController {
     
     //システム音変更
     func systemVolumeChange(setVolume:Float){
-        var session: AVAudioSession = AVAudioSession.sharedInstance()
         let aSession = AVAudioSession()
         let volume = aSession.outputVolume
         if(volume < setVolume){ //v以下なら強制vに
+            let volumeView = MPVolumeView()
+            for view in volumeView.subviews {
+                if view is UISlider {
+                    (view as! UISlider).value = setVolume
+                    break;
+                }
+            }
+        }
+    }
+    //システム音減少
+    func systemVolumeDecrease(setVolume:Float){
+        let aSession = AVAudioSession()
+        let volume = aSession.outputVolume
+        if(volume > setVolume){ //v以上なら強制vに
             let volumeView = MPVolumeView()
             for view in volumeView.subviews {
                 if view is UISlider {
