@@ -309,10 +309,20 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
                     self.settingAlarmTime()
                     self.pushNotification()
                     self.volumeChange.systemVolumeChange(1.0) //システム音変更
+                    NSTimer.scheduledTimerWithTimeInterval(1.5, target: self, selector: "repeatManual", userInfo: nil, repeats: false)
                 }
             })
         })
         
+    }
+    func repeatManual() {
+        let ud = NSUserDefaults.standardUserDefaults()
+        if !ud.boolForKey("VIRGIN_SWITCH") {
+            ud.setBool(true, forKey: "VIRGIN_SWITCH")
+            let alert = UIAlertController(title: "毎日繰り返し登録", message: "オンのとき時計アイコンをタップすると青くなり、繰り返しセットできます", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     //ギブアップボタン
     func giveUpBtnAction(sender: UIButton){
@@ -338,9 +348,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
         let alert:UIAlertController = UIAlertController(title:strCrypho,
             message: lm.getString(9),
             preferredStyle: UIAlertControllerStyle.Alert)
-        
-        
-        
         let cancelAction:UIAlertAction = UIAlertAction(title: "Cancel",
             style: UIAlertActionStyle.Cancel,
             handler:{
