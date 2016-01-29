@@ -181,9 +181,6 @@
 		9A361E8F1AA2DDCF003240CB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		9A361E911AA2EC95003240CB /* libAdapterNend.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdapterNend.a; path = ../libAdapterNend.a; sourceTree = "<group>"; };
 		9A361E941AA2ECAA003240CB /* libNendAd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libNendAd.a; sourceTree = "<group>"; };
-		9A361E951AA2ECAA003240CB /* NADIconArrayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NADIconArrayView.h; sourceTree = "<group>"; };
-		9A361E961AA2ECAA003240CB /* NADIconLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NADIconLoader.h; sourceTree = "<group>"; };
-		9A361E971AA2ECAA003240CB /* NADIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NADIconView.h; sourceTree = "<group>"; };
 		9A361E981AA2ECAA003240CB /* NADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NADInterstitial.h; sourceTree = "<group>"; };
 		9A361E991AA2ECAA003240CB /* NADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NADView.h; sourceTree = "<group>"; };
 		9A361E9A1AA2ECAA003240CB /* NADView_readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NADView_readme.txt; sourceTree = "<group>"; };
@@ -458,9 +455,6 @@
 			children = (
 				9A361E911AA2EC95003240CB /* libAdapterNend.a */,
 				9A361E941AA2ECAA003240CB /* libNendAd.a */,
-				9A361E951AA2ECAA003240CB /* NADIconArrayView.h */,
-				9A361E961AA2ECAA003240CB /* NADIconLoader.h */,
-				9A361E971AA2ECAA003240CB /* NADIconView.h */,
 				9A361E981AA2ECAA003240CB /* NADInterstitial.h */,
 				9A361E991AA2ECAA003240CB /* NADView.h */,
 				9A361E9A1AA2ECAA003240CB /* NADView_readme.txt */,

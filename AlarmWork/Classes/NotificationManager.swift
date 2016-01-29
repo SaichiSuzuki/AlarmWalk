@@ -17,7 +17,7 @@ class NotificationManager :UIResponder{
     var postInterval = 17
     
     init(diff:Int){
-//        print("\(diff)秒後にセットします")
+        print("\(diff)秒後にセットします")
         self.timeDifference = diff
     }
     //プッシュ通知設定行う
@@ -39,7 +39,7 @@ class NotificationManager :UIResponder{
     }
     //通知仕込み処理
     func pushSixteen() {
-//        print("仕込み開始")
+        print("仕込み開始")
         var cnt = 0
         //        println(timeDifference)
         let lm = LangManager()
@@ -48,7 +48,7 @@ class NotificationManager :UIResponder{
         ud.synchronize()
         while(cnt < postTime) {
             if(ud.boolForKey("PUSH") == false){
-//                println("これは抜ける!")
+                print("これは抜ける!")
                 break
             }
             let secondPost = Double(timeDifference)
@@ -66,14 +66,14 @@ class NotificationManager :UIResponder{
         if(ud.boolForKey("PUSH") == false){
             NotificationUtil.pushDelete()
         }
-//        print("仕込み完了")
+        print("仕込み完了")
     }
 }
 
 struct NotificationUtil {
     static func pushDelete(){
         //全てのローカル通知を削除する。（過去のローカル通知を削除する）
-//        print("通知削除")
+        print("通知削除")
         UIApplication.sharedApplication().cancelAllLocalNotifications()
     }
 }
