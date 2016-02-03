@@ -17,7 +17,7 @@ class NotificationManager :UIResponder{
     var postInterval = 17
     
     init(diff:Int){
-        print("\(diff)秒後にセットします")
+        //print("\(diff)秒後にセットします")
         self.timeDifference = diff
     }
     //プッシュ通知設定行う
@@ -39,16 +39,18 @@ class NotificationManager :UIResponder{
     }
     //通知仕込み処理
     func pushSixteen() {
-        print("仕込み開始")
+//        print("仕込み開始")
         var cnt = 0
-        //        println(timeDifference)
+        //print(timeDifference)
         let lm = LangManager()
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setBool(true, forKey: "PUSH")
         ud.synchronize()
+        // 昇順で通知セット(近い方から)
+        var firstFlag = true
         while(cnt < postTime) {
             if(ud.boolForKey("PUSH") == false){
-                print("これは抜ける!")
+                //print("これは抜ける!")
                 break
             }
             let secondPost = Double(timeDifference)
@@ -57,7 +59,10 @@ class NotificationManager :UIResponder{
             myNotification.alertBody = lm.getString(14)
             let musicNameStr = ud.stringForKey("MUSIC_NAME")!
             myNotification.soundName = musicNameStr + ".caf"
-            myNotification.applicationIconBadgeNumber = 1
+            if firstFlag {
+                firstFlag = false
+                myNotification.applicationIconBadgeNumber = 1
+            }
             myNotification.timeZone = NSTimeZone.defaultTimeZone()
             myNotification.fireDate = NSDate(timeIntervalSinceNow: secondPost+(Double(cnt*postInterval)))
             UIApplication.sharedApplication().scheduleLocalNotification(myNotification)
@@ -66,14 +71,14 @@ class NotificationManager :UIResponder{
         if(ud.boolForKey("PUSH") == false){
             NotificationUtil.pushDelete()
         }
-        print("仕込み完了")
+//        print("仕込み完了")
     }
 }
 
 struct NotificationUtil {
     static func pushDelete(){
         //全てのローカル通知を削除する。（過去のローカル通知を削除する）
-        print("通知削除")
+//        print("通知削除")
         UIApplication.sharedApplication().cancelAllLocalNotifications()
     }
 }

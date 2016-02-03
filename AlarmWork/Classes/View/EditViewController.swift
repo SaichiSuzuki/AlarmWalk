@@ -418,14 +418,16 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
 //            let lm = LangManager()
 //            self.openAlert("GoodMorning", messageStr: lm.getString(12), okStr: "OK") //アラート表示
         }
+        //バッジの数を0にする.
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         splashAnimation()
         //課金リセット
-        //        let ud = NSUserDefaults.standardUserDefaults()
-        //        ud.setBool(false, forKey: "PURCHASE_MUSIC")
-        //        ud.synchronize()
+//                let ud = NSUserDefaults.standardUserDefaults()
+//                ud.setBool(true, forKey: "PURCHASE_MUSIC")
+//                ud.synchronize()
         //        removeFromParentViewController() //とりあえずなんか解放できるかも navigationbar使えなくなる
         self.ai = AdmobInterstitial(view: self) //Admobインタースティシャルインスタンスを生成
         //        println(ud.integerForKey("TUTORIALLIFE"))
