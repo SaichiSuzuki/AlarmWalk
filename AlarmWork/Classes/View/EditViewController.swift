@@ -293,7 +293,6 @@ class EditViewController: UIViewController, UIPickerViewDelegate, CLLocationMana
             let rm = RandMusic()
             ud.setObject(rm.getRandMusic(), forKey: "MUSIC_NAME")
             ud.synchronize()
-//            print(ud.stringForKey("MUSIC_NAME"))
         }
         
         let qualityOfServiceClass = DISPATCH_QUEUE_PRIORITY_DEFAULT

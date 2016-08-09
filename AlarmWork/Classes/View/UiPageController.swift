@@ -561,8 +561,6 @@ class UiPageController: UIViewController, UIScrollViewDelegate{
     var blockCount = 18
     var blockSize:CGFloat = 15
     func blockCreate() {
-        let volumeChange = SystemVolumeController()
-        volumeChange.systemVolumeDecrease(0.3) //システム音変更
         for (var i=0; i<blockCount; i++){
             let imageView = UIImageView(frame: CGRect(x: -250 + (CGFloat(i) * blockSize),y: winSize.height/2 + 90,width: blockSize,height: blockSize))
             imageView.image = UIImage(named: "block.png")

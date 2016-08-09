@@ -88,9 +88,6 @@
 		9A361E801AA2B8F2003240CB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A361E7F1AA2B8F2003240CB /* SystemConfiguration.framework */; };
 		9A361E8E1AA2DDC7003240CB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A361E8D1AA2DDC6003240CB /* Security.framework */; };
 		9A361E901AA2DDCF003240CB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A361E8F1AA2DDCF003240CB /* ImageIO.framework */; };
-		9A361E921AA2EC95003240CB /* libAdapterNend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A361E911AA2EC95003240CB /* libAdapterNend.a */; };
-		9A361E9B1AA2ECAA003240CB /* libNendAd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A361E941AA2ECAA003240CB /* libNendAd.a */; };
-		9A361E9C1AA2ECAB003240CB /* NADView_readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9A361E9A1AA2ECAA003240CB /* NADView_readme.txt */; };
 		9A5C697D1A6B1C5D00B84E94 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5C697C1A6B1C5D00B84E94 /* MediaPlayer.framework */; };
 		9A6B72851A61165300EE1F2F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A6B72841A61165300EE1F2F /* AVFoundation.framework */; };
 		9A6B728A1A61267C00EE1F2F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A6B72891A61267C00EE1F2F /* CoreLocation.framework */; };
@@ -179,11 +176,6 @@
 		9A361E7F1AA2B8F2003240CB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A361E8D1AA2DDC6003240CB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9A361E8F1AA2DDCF003240CB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		9A361E911AA2EC95003240CB /* libAdapterNend.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdapterNend.a; path = ../libAdapterNend.a; sourceTree = "<group>"; };
-		9A361E941AA2ECAA003240CB /* libNendAd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libNendAd.a; sourceTree = "<group>"; };
-		9A361E981AA2ECAA003240CB /* NADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NADInterstitial.h; sourceTree = "<group>"; };
-		9A361E991AA2ECAA003240CB /* NADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NADView.h; sourceTree = "<group>"; };
-		9A361E9A1AA2ECAA003240CB /* NADView_readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NADView_readme.txt; sourceTree = "<group>"; };
 		9A5C697C1A6B1C5D00B84E94 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		9A6B72841A61165300EE1F2F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		9A6B72891A61267C00EE1F2F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -206,11 +198,9 @@
 				9A361E781AA2B8D0003240CB /* EventKit.framework in Frameworks */,
 				9A361E761AA2B8C6003240CB /* CoreTelephony.framework in Frameworks */,
 				9A361E741AA2B8BC003240CB /* CoreGraphics.framework in Frameworks */,
-				9A361E9B1AA2ECAA003240CB /* libNendAd.a in Frameworks */,
 				9A361E721AA2B8A3003240CB /* AdSupport.framework in Frameworks */,
 				9AF9C8131A6C385B00F24C1B /* AudioToolbox.framework in Frameworks */,
 				9A5C697D1A6B1C5D00B84E94 /* MediaPlayer.framework in Frameworks */,
-				9A361E921AA2EC95003240CB /* libAdapterNend.a in Frameworks */,
 				9A6B728A1A61267C00EE1F2F /* CoreLocation.framework in Frameworks */,
 				9A6B72851A61165300EE1F2F /* AVFoundation.framework in Frameworks */,
 			);
@@ -312,7 +302,6 @@
 			isa = PBXGroup;
 			children = (
 				9A11B2311AB2A93800AB9F90 /* Frameworks */,
-				9A361E931AA2ECAA003240CB /* NendAd */,
 				9A16F00A1A60D3E100C12524 /* AlarmWork */,
 				9A16F0201A60D3E100C12524 /* AlarmWorkTests */,
 				9A16F0091A60D3E100C12524 /* Products */,
@@ -450,18 +439,6 @@
 			path = SE;
 			sourceTree = "<group>";
 		};
-		9A361E931AA2ECAA003240CB /* NendAd */ = {
-			isa = PBXGroup;
-			children = (
-				9A361E911AA2EC95003240CB /* libAdapterNend.a */,
-				9A361E941AA2ECAA003240CB /* libNendAd.a */,
-				9A361E981AA2ECAA003240CB /* NADInterstitial.h */,
-				9A361E991AA2ECAA003240CB /* NADView.h */,
-				9A361E9A1AA2ECAA003240CB /* NADView_readme.txt */,
-			);
-			path = NendAd;
-			sourceTree = "<group>";
-		};
 		9AE849981A60F262007D5495 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -567,7 +544,6 @@
 				157C553F1C43EE770027C857 /* block.png in Resources */,
 				9A16F0131A60D3E100C12524 /* Main.storyboard in Resources */,
 				9A2CEE3D1ABFEB7A0078A7AB /* effect_timewarning.mp3 in Resources */,
-				9A361E9C1AA2ECAB003240CB /* NADView_readme.txt in Resources */,
 				1575F4A61C43FA2900551D00 /* simaumar04.png in Resources */,
 				153518CB1B7DB9D30091CE43 /* howto1_2.png in Resources */,
 				9A2CEE1F1ABFEB7A0078A7AB /* bg.png in Resources */,
@@ -785,7 +761,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/NendAd",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -817,7 +792,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/NendAd",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
